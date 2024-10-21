@@ -1,6 +1,10 @@
 class_name NeoQOL
 extends Node
 
+func _ready():
+	print("loaded")
+	_load_mod_resources()
+
 static func _apply_stack_visual(display_stacked,idata,stack_size):
 	#print("######################## APPLYING VISUAL ######################## ")
 	if not display_stacked:
@@ -41,6 +45,82 @@ static func _initialize_keys():
 		if !item.has("locked"): item["locked"] = false
 		if !item.has("stack_size"): item["stack_size"] = 0 # note: stack size is zero indexed, 0 = 1, 1 = 2, etc
 		if !item.has("stacked"): item["stacked"] = false # tracks if item is considered stacked with another item
+
+static func _replace_player_label(title):
+	var parent = title.get_child(0)
+	var original = parent.get_child(1)
+	var original_text
+	if original is Label:
+		original_text = original.text
+	else:
+		original_text = original.bbcode_text
+	parent.remove_child(original)
+	original.queue_free()
+	var label:RichTextLabel = RichTextLabel.new()
+	label.add_font_override("normal_font", preload("res://mods/NeoQOLPack/Themes/player_title.tres"))
+	label.bbcode_enabled = true
+	label.name = "Label2"
+	label.bbcode_text = original_text
+	label.fit_content_height = true
+	parent.add_child(label)
+	label.margin_left = 0 
+	label.margin_top = 936
+	label.margin_right = 720
+	label.margin_bottom = 960
+	#label.rect_position = Vector2(0,936)
+
+static func _load_mod_resources():
+	print("Loading NEOQOL Resources...")
+	var resource_count = 0
+	var files = []
+	var subdirectories = []
+	var dir = Directory.new()
+	var path = "res://mods/NeoQOLPack/Resources/"
+	
+	if dir.open(path) != OK:
+		print("Error loading resource directory.")
+		return 
+	dir.list_dir_begin(true, true)
+	while true:
+		var file = dir.get_next()
+		if file == "":
+			break
+		elif dir.current_is_dir():
+			subdirectories.append(file)
+			print("Directory found: ", file)
+	
+	for directory in subdirectories:
+		if dir.open(path + directory) != OK:
+			print("Error loading resource subdirectory ", directory)
+			break
+		dir.list_dir_begin(true, true)
+		while true:
+			var file = dir.get_next()
+			if file == "":
+				break
+			elif file.ends_with(".tres"):
+				files.append([path + directory + "/" + file, file])
+				resource_count += 1
+	
+	for file in files:
+		_add_mod_resource(file[0], file[1])
+	
+	dir.list_dir_end()
+	print(str(resource_count) + " Resoures Loaded from " + str(subdirectories.size()) + " Subdirectories.")
+
+static func _add_mod_resource(file, file_name):
+	file_name = file_name.replace(".tres", "")
+	var read = load(file)
+	if read.get("resource_type") == null:
+		print("TRES file does not have resource type labeled.")
+		return 
+	var type = read.get("resource_type")
+	
+	var new = {}
+	new["file"] = load(file)
+	match type:
+		"cosmetic": Globals.cosmetic_data[file_name] = new
+		"item": Globals.item_data[file_name] = new
 
 static func _stack_items():
 	print("######################## STACKING ITEMS ########################")

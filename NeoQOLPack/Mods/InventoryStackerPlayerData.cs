@@ -32,7 +32,8 @@ public class InventoryStackerPlayerData(Mod mod) : IScriptMod
 			{
 				mod.Logger.Information("#################### FOUND ENTRY FUNC ######################");
 				yield return token;
-
+				//if $"/root/MyModId":
+				
 				yield return new Token(TokenType.Newline, 1);
 				yield return new Token(TokenType.Dollar);
 				yield return new ConstantToken(new StringVariant("/root/NeoQOLPack"));
