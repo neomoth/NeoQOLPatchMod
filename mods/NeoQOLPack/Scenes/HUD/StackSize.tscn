@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Assets/Themes/main.tres" type="Theme" id=1]
+
+[node name="StackSize" type="Label"]
+grow_horizontal = 0
+theme = ExtResource( 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "x0"
+align = 2

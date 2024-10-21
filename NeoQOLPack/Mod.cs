@@ -17,6 +17,7 @@ public class Mod : IMod {
 		modInterface.RegisterScriptMod(new InventoryStackerItem(this));
 		modInterface.RegisterScriptMod(new InventoryStackerPlayerData(this));
 		modInterface.RegisterScriptMod(new InventoryStackerInventory(this));
+		modInterface.RegisterScriptMod(new InventoryStackerSelect(this));
 	}
 
 	public IEnumerable<Token> GetMod()

@@ -6,8 +6,6 @@ namespace NeoQOLPack.Mods;
 
 public class InventoryStackerPlayerData(Mod mod) : IScriptMod
 {
-	private Mod mod = mod;
-
 	public bool ShouldRun(string path) => path == "res://Scenes/Singletons/playerdata.gdc";
 
 	public IEnumerable<Token> Modify(string path, IEnumerable<Token> tokens)
@@ -36,7 +34,8 @@ public class InventoryStackerPlayerData(Mod mod) : IScriptMod
 				yield return token;
 
 				yield return new Token(TokenType.Newline, 1);
-				foreach (var t in mod.GetMod()) yield return t;
+				yield return new Token(TokenType.Dollar);
+				yield return new ConstantToken(new StringVariant("/root/NeoQOLPack"));
 				yield return new Token(TokenType.Period);
 				yield return new IdentifierToken("_append_entry");
 				yield return new Token(TokenType.ParenthesisOpen);
@@ -50,7 +49,8 @@ public class InventoryStackerPlayerData(Mod mod) : IScriptMod
 				yield return token;
 
 				yield return new Token(TokenType.Newline, 1);
-				foreach (var t in mod.GetMod()) yield return t;
+				yield return new Token(TokenType.Dollar);
+				yield return new ConstantToken(new StringVariant("/root/NeoQOLPack"));
 				yield return new Token(TokenType.Period);
 				yield return new IdentifierToken("_append_entry");
 				yield return new Token(TokenType.ParenthesisOpen);
@@ -64,15 +64,17 @@ public class InventoryStackerPlayerData(Mod mod) : IScriptMod
 				yield return token;
 
 				yield return new Token(TokenType.Newline, 1);
-				foreach (var t in mod.GetMod()) yield return t;
+				yield return new Token(TokenType.Dollar);
+				yield return new ConstantToken(new StringVariant("/root/NeoQOLPack"));
 				yield return new Token(TokenType.Period);
 				yield return new IdentifierToken("_initialize_keys");
 				yield return new Token(TokenType.ParenthesisOpen);
 				yield return new Token(TokenType.ParenthesisClose);
 				yield return new Token(TokenType.Newline, 1);
-				foreach (var t in mod.GetMod()) yield return t;
+				yield return new Token(TokenType.Dollar);
+				yield return new ConstantToken(new StringVariant("/root/NeoQOLPack"));
 				yield return new Token(TokenType.Period);
-				yield return new IdentifierToken("_stack_items()");
+				yield return new IdentifierToken("_stack_items");
 				yield return new Token(TokenType.ParenthesisOpen);
 				yield return new Token(TokenType.ParenthesisClose);
 				yield return new Token(TokenType.Newline, 1);

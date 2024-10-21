@@ -6,21 +6,17 @@ namespace NeoQOLPack.Mods;
 
 public class InventoryStackerInventory(Mod mod) : IScriptMod
 {
-	private Mod mod = mod;
-
 	public bool ShouldRun(string path) => path == "res://Scenes/HUD/inventory.gdc";
 
 	public IEnumerable<Token> Modify(string path, IEnumerable<Token> tokens)
 	{
 		mod.Logger.Information("hi im loaded probably");
-		MultiTokenWaiter addWaiter = new ([
-			t => t is IdentifierToken {Name: "box"},
-			t => t is IdentifierToken {Name: "add_child"},
-			t => t.Type == TokenType.Newline
-		], allowPartialMatch: true);
+		
 		
 		MultiTokenWaiter refreshWaiter = new([
 			t => t is IdentifierToken {Name: "_refresh"},
+			t => t is IdentifierToken {Name: "refs"},
+			t => t.Type == TokenType.CurlyBracketClose,
 			t => t.Type is TokenType.Newline
 		], allowPartialMatch: true);
 		
@@ -47,37 +43,35 @@ public class InventoryStackerInventory(Mod mod) : IScriptMod
 		
 		foreach (Token token in tokens)
 		{
-			mod.Logger.Information("wawa");
-			mod.Logger.Information(token.ToString());
-			mod.Logger.Information(refreshWaiter.Check(token).ToString());
+			// mod.Logger.Information("wawa");
+			// mod.Logger.Information(token.ToString());
+			// mod.Logger.Information(refreshWaiter.Check(token).ToString());
 			if (refreshWaiter.Check(token))
 			{
 				yield return token;
 				
-				mod.Logger.Information("#################### FOUND REFRESH FUNC ######################");
+				var t1 = new Token(TokenType.Period);
+				var t2 = new IdentifierToken("_stack_items");
+				var t3 = new Token(TokenType.ParenthesisOpen);
+				var t4 = new Token(TokenType.ParenthesisClose);
+				var t5 = new Token(TokenType.Newline, 1);
 				
-				foreach (var t in mod.GetMod()) yield return t;
-				yield return new Token(TokenType.Period);
-				yield return new IdentifierToken("_stack_items()");
-				yield return new Token(TokenType.ParenthesisOpen);
-				yield return new Token(TokenType.ParenthesisClose);
-				yield return new Token(TokenType.Newline, 1);
-			}
-			else if (addWaiter.Check(token))
-			{
-				mod.Logger.Information("#################### FOUND ADD FUNC ######################");
-				yield return token;
+				mod.Logger.Information($"tokens: {t1}{t2}{t3}{t4}{t5} at {token}");
 				
-				yield return new IdentifierToken("i");
-				yield return new Token(TokenType.Period);
-				yield return new IdentifierToken("display_stacked");
-				yield return new Token(type: TokenType.OpAssign);
-				yield return new ConstantToken(new BoolVariant(true));
-				yield return new Token(TokenType.Newline, 1);
+				mod.Logger.Information("#################### FOUND REFRESH FUNC ######################"); // C
+				mod.Logger.Information("WAWAWAWAWAWAWWA");
+				yield return new Token(TokenType.Dollar);
+				yield return new ConstantToken(new StringVariant("/root/NeoQOLPack"));
+				yield return t1;
+				yield return t2;
+				yield return t3;
+				yield return t4;
+				yield return t5;
 			}
+			
 			else if (skipperWaiter.Check(token))
 			{
-				mod.Logger.Information("#################### FOUND SKIP FUNC ######################");
+				mod.Logger.Information("#################### FOUND SKIP FUNC ######################"); // C
 				yield return token;
 
 				yield return new Token(TokenType.CfIf);

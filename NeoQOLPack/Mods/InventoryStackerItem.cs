@@ -6,8 +6,6 @@ namespace NeoQOLPack.Mods;
 
 public class InventoryStackerItem(Mod mod) : IScriptMod
 {
-	private Mod mod = mod;
-
 	public bool ShouldRun(string path) => path == "res://Scenes/HUD/inventory_item.gdc";
 
 	public IEnumerable<Token> Modify(string path, IEnumerable<Token> tokens)
@@ -29,7 +27,7 @@ public class InventoryStackerItem(Mod mod) : IScriptMod
 		{
 			if (varWaiter.Check(token))
 			{
-				mod.Logger.Information("#################### FOUND VAR SPOT ######################");
+				mod.Logger.Information("#################### FOUND VAR SPOT ######################"); // C
 				yield return token;
 
 				yield return new Token(TokenType.PrVar);
@@ -41,7 +39,8 @@ public class InventoryStackerItem(Mod mod) : IScriptMod
 				yield return new Token(TokenType.PrVar);
 				yield return new IdentifierToken("stack_size");
 				yield return new Token(TokenType.OpAssign);
-				foreach (var t in mod.GetMod()) yield return t;
+				yield return new Token(TokenType.Dollar);
+				yield return new ConstantToken(new StringVariant("/root/NeoQOLPack"));
 				yield return new Token(TokenType.Period);
 				yield return new IdentifierToken("_attach_stack_size");
 				yield return new Token(TokenType.ParenthesisOpen);
@@ -52,11 +51,12 @@ public class InventoryStackerItem(Mod mod) : IScriptMod
 			}
 			else if (updateWaiter.Check(token))
 			{
-				mod.Logger.Information("#################### FOUND UPDATE FUNC ######################");
+				mod.Logger.Information("#################### FOUND UPDATE FUNC ######################"); // C
 				yield return token;
 
 				yield return new Token(TokenType.Newline, 1);
-				foreach (var t in mod.GetMod()) yield return t;
+				yield return new Token(TokenType.Dollar);
+				yield return new ConstantToken(new StringVariant("/root/NeoQOLPack"));
 				yield return new Token(TokenType.Period);
 				yield return new IdentifierToken("_apply_stack_visual");
 				yield return new Token(TokenType.ParenthesisOpen);
