@@ -50,28 +50,22 @@ public class InventoryStackerInventory(Mod mod) : IScriptMod
 			{
 				yield return token;
 				
-				var t1 = new Token(TokenType.Period);
-				var t2 = new IdentifierToken("_stack_items");
-				var t3 = new Token(TokenType.ParenthesisOpen);
-				var t4 = new Token(TokenType.ParenthesisClose);
-				var t5 = new Token(TokenType.Newline, 1);
+				// mod.Logger.Information($"tokens: {t1}{t2}{t3}{t4}{t5} at {token}");
 				
-				mod.Logger.Information($"tokens: {t1}{t2}{t3}{t4}{t5} at {token}");
-				
-				mod.Logger.Information("#################### FOUND REFRESH FUNC ######################"); // C
-				mod.Logger.Information("WAWAWAWAWAWAWWA");
+				// mod.Logger.Information("#################### FOUND REFRESH FUNC ######################"); // C
+				// mod.Logger.Information("WAWAWAWAWAWAWWA");
 				yield return new Token(TokenType.Dollar);
 				yield return new ConstantToken(new StringVariant("/root/NeoQOLPack"));
-				yield return t1;
-				yield return t2;
-				yield return t3;
-				yield return t4;
-				yield return t5;
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("_stack_items");
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new Token(TokenType.ParenthesisClose);
+				yield return new Token(TokenType.Newline, 1);
 			}
 			
 			else if (skipperWaiter.Check(token))
 			{
-				mod.Logger.Information("#################### FOUND SKIP FUNC ######################"); // C
+				// mod.Logger.Information("#################### FOUND SKIP FUNC ######################"); // C
 				yield return token;
 
 				yield return new Token(TokenType.CfIf);

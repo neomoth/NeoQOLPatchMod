@@ -1,0 +1,74 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Assets/Themes/main.tres" type="Theme" id=1]
+[ext_resource path="res://Assets/Themes/main_font.tres" type="DynamicFont" id=2]
+[ext_resource path="res://mods/NeoQOLPack/Themes/darker_panel.tres" type="StyleBox" id=3]
+[ext_resource path="res://Assets/Themes/panel_red.tres" type="StyleBox" id=4]
+[ext_resource path="res://Assets/Themes/panel_green.tres" type="StyleBox" id=5]
+
+[node name="UpdateNotice" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Panel" type="Panel" parent="."]
+anchor_left = 0.371
+anchor_top = 0.393
+anchor_right = 0.662
+anchor_bottom = 0.618
+margin_left = -0.320068
+margin_top = -0.440002
+margin_right = 0.959839
+margin_bottom = -0.440063
+theme = ExtResource( 1 )
+
+[node name="Panel" type="Panel" parent="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -8.0
+margin_bottom = -10.0
+custom_styles/panel = ExtResource( 3 )
+
+[node name="Label" type="Label" parent="Panel"]
+margin_top = 10.0
+margin_right = 560.0
+margin_bottom = 44.0
+custom_colors/font_color = Color( 1, 0.137255, 0.137255, 1 )
+custom_fonts/font = ExtResource( 2 )
+text = "Mod version is out of date!"
+align = 1
+
+[node name="Label2" type="Label" parent="Panel"]
+margin_top = 70.0
+margin_right = 560.0
+margin_bottom = 141.0
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_fonts/font = ExtResource( 2 )
+text = "Your install of NeoQOLPack is out of date.
+Would you like to install the latest version?"
+align = 1
+
+[node name="Button" type="Button" parent="Panel"]
+anchor_left = 0.157
+anchor_top = 0.724
+anchor_right = 0.386
+anchor_bottom = 0.889
+margin_left = 0.0799942
+margin_top = -1.93201
+margin_right = -0.160004
+margin_bottom = -0.0270081
+custom_styles/normal = ExtResource( 5 )
+text = "Yeah"
+
+[node name="Button2" type="Button" parent="Panel"]
+anchor_left = 0.614
+anchor_top = 0.724
+anchor_right = 0.843
+anchor_bottom = 0.889
+margin_left = 0.159973
+margin_top = -1.93201
+margin_right = -0.0800171
+margin_bottom = -0.0270081
+custom_styles/normal = ExtResource( 4 )
+text = "Nah"

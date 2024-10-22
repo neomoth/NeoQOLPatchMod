@@ -5,9 +5,9 @@
 
 [resource]
 script = ExtResource( 1 )
-name = "Bird Fucker Title"
-desc = "Yeah, I'd fuck that pelican."
-title = "[color=blue]bird fucker[/color]"
+name = ":33333333 Title"
+desc = "hehehehehehehehe"
+title = "[color=green]:33333333[/color]"
 icon = ExtResource( 2 )
 species_alt_mesh = [  ]
 main_color = Color( 1, 1, 1, 1 )

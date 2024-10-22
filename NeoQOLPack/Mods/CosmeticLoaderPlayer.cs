@@ -14,7 +14,13 @@ public class CosmeticLoaderPlayer(Mod mod) : IScriptMod
 			t => t is IdentifierToken {Name: "_ready"},
 			t => t.Type == TokenType.Newline
 		],allowPartialMatch: true);
+		
+		
 
+		//"/iamweest": PlayerData._unlock_cosmetic("title_streamerman")
+		// "/colonthreetimeseight": PlayerData._unlock_cosmetic("title_colonthreetimeseight")
+		// "/hithisisaveryhardstringtotrytoguesslol": PlayerData._unlock_cosmetic("title_seventvowner")
+		
 		foreach (Token token in tokens)
 		{
 			if (readyWaiter.Check(token))
@@ -27,10 +33,11 @@ public class CosmeticLoaderPlayer(Mod mod) : IScriptMod
 				yield return new Token(TokenType.ParenthesisOpen);
 				yield return new IdentifierToken("title");
 				yield return new Token(TokenType.ParenthesisClose);
-				
+
 				yield return new Token(TokenType.Newline, 1);
-				
-			} else yield return token;
+
+			}
+			else yield return token;
 		}
 	}
 }

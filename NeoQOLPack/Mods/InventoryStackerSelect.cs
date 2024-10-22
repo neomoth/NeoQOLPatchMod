@@ -26,7 +26,7 @@ public class InventoryStackerSelect(Mod mod) : IScriptMod
 					mod.Logger.Information("PENIS");
 				}
 
-				mod.Logger.Information("#################### FOUND ADD FUNC ######################");
+				// mod.Logger.Information("#################### FOUND ADD FUNC ######################");
 				yield return token;
 
 				yield return new IdentifierToken("i");

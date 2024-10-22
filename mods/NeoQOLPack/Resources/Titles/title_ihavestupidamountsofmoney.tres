@@ -5,9 +5,9 @@
 
 [resource]
 script = ExtResource( 1 )
-name = "Bird Fucker Title"
-desc = "Yeah, I'd fuck that pelican."
-title = "[color=blue]bird fucker[/color]"
+name = "I Have Stupid Amounts Of Money Title"
+desc = "show off how little you touch grass!"
+title = "[color=green][wave]I have stupid amounts of money.[/wave][/color]"
 icon = ExtResource( 2 )
 species_alt_mesh = [  ]
 main_color = Color( 1, 1, 1, 1 )
@@ -19,4 +19,4 @@ category = "title"
 cos_internal_id = 0
 in_rotation = false
 chest_reward = false
-cost = 10
+cost = 9999999

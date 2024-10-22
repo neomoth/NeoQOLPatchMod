@@ -15,6 +15,10 @@
         <None Include="manifest.json" CopyToOutputDirectory="PreserveNewest"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="JObject" Version="1.0.0" />
+    </ItemGroup>
+
     <Target
         Name="PostBuild"
         AfterTargets="PostBuildEvent"

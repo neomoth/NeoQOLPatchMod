@@ -27,7 +27,7 @@ public class InventoryStackerItem(Mod mod) : IScriptMod
 		{
 			if (varWaiter.Check(token))
 			{
-				mod.Logger.Information("#################### FOUND VAR SPOT ######################"); // C
+				// mod.Logger.Information("#################### FOUND VAR SPOT ######################"); // C
 				yield return token;
 
 				yield return new Token(TokenType.PrVar);
@@ -51,7 +51,7 @@ public class InventoryStackerItem(Mod mod) : IScriptMod
 			}
 			else if (updateWaiter.Check(token))
 			{
-				mod.Logger.Information("#################### FOUND UPDATE FUNC ######################"); // C
+				// mod.Logger.Information("#################### FOUND UPDATE FUNC ######################"); // C
 				yield return token;
 
 				yield return new Token(TokenType.Newline, 1);

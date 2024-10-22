@@ -1,9 +1,32 @@
 class_name NeoQOL
 extends Node
 
+#var version = "unknown"
+#var checked_new_version = "unknown"
+
 func _ready():
 	print("loaded")
 	_load_mod_resources()
+
+func _append_version(parent,version = "unknown"):
+	print("attaching label...")
+	var label: RichTextLabel = RichTextLabel.new()
+	parent.add_child(label)
+	label.anchor_left = 0.01
+	label.anchor_top =  0.946
+	label.anchor_right = 0.4
+	label.anchor_bottom = 0.985
+	label.margin_left = 0
+	label.margin_top =  0
+	label.margin_right = 0
+	label.margin_bottom = -1
+	label.rect_position = Vector2(20,1022)
+	label.rect_size = Vector2(748,40)
+	label.fit_content_height = true
+	label.scroll_active = false
+	label.add_color_override("default_color", Color.white)
+	label.bbcode_enabled = true
+	label.bbcode_text = "[color=purple]NeoQOLPack[/color] "+str(version)
 
 static func _apply_stack_visual(display_stacked,idata,stack_size):
 	#print("######################## APPLYING VISUAL ######################## ")
@@ -67,7 +90,27 @@ static func _replace_player_label(title):
 	label.margin_top = 936
 	label.margin_right = 720
 	label.margin_bottom = 960
+	label.rect_clip_content = false
 	#label.rect_position = Vector2(0,936)
+
+static func _shorten_cost(cost):
+	#print("shortening cost")
+	if cost >= 10000:
+		var shortened = cost / 1000
+		return str(shortened)+"K"
+	return str(cost)
+
+static func _append_shop_buttons(parent,ref):
+	var button = preload("res://Scenes/HUD/Shop/ShopButtons/shop_button.tscn").instance()
+	button.set_script(preload("res://Scenes/HUD/Shop/ShopButtons/button_cosmetic_unlock.gd"))
+	button.cosmetic_unlock = "title_ihavestupidamountsofmoney"
+	#button.cosmetic_unlock = item
+	button.cost = 999999
+	#button.cost = Globals.cosmetic_data[item]["file"].cost
+	parent.add_child(button)
+	button.hud = ref.get_node(ref.hud)
+	button.connect("mouse_entered", ref, "_item_entered", [button])
+	button.connect("_used", ref, "_slot_used")
 
 static func _load_mod_resources():
 	print("Loading NEOQOL Resources...")

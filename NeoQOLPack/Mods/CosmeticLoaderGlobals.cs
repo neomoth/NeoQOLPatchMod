@@ -10,7 +10,7 @@ public class CosmeticLoaderGlobals(Mod mod) : IScriptMod
 
 	public IEnumerable<Token> Modify(string path, IEnumerable<Token> tokens)
 	{
-		mod.Logger.Information("loaded globals.gdc");
+		// mod.Logger.Information("loaded globals.gdc");
 		MultiTokenWaiter extendsWaiter = new MultiTokenWaiter([
 			t=>t.Type == TokenType.PrExtends,
 			t => t.Type == TokenType.Newline,
@@ -50,7 +50,7 @@ public class CosmeticLoaderGlobals(Mod mod) : IScriptMod
 			}
 			else if (readyWaiter.Check(token))
 			{
-				mod.Logger.Information("found ready func");
+				// mod.Logger.Information("found ready func");
 				yield return token;
 				
 				yield return new Token(TokenType.Newline, 1);
