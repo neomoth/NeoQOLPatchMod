@@ -15,7 +15,7 @@ public class Mod : IMod
 	public Config Config;
 	public ILogger Logger;
 
-	private static readonly string versionTag = "Beta4";
+	private static readonly string versionTag = "Beta5";
 	private static readonly string repo = "neomoth/NeoQOLPack";
 
 	private bool injectUpdateNotice = false;
