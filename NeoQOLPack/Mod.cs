@@ -17,7 +17,7 @@ public class Mod : IMod
 	public Config Config;
 	public ILogger Logger;
 
-	private static readonly string versionTag = "Beta2";
+	private static readonly string versionTag = "Beta4";
 	private static readonly string repo = "neomoth/NeoQOLPack";
 
 	private bool injectUpdateNotice = false;
@@ -27,18 +27,20 @@ public class Mod : IMod
 		this.Config = modInterface.ReadConfig<Config>();
 		Logger = modInterface.Logger;
 		_ = GetVersion();
-		modInterface.RegisterScriptMod(new InventoryStackerItem(this));
-		modInterface.RegisterScriptMod(new InventoryStackerPlayerData(this));
-		modInterface.RegisterScriptMod(new InventoryStackerInventory(this));
-		modInterface.RegisterScriptMod(new InventoryStackerSelect(this));
-		modInterface.RegisterScriptMod(new CosmeticLoaderGlobals(this));
-		modInterface.RegisterScriptMod(new CosmeticLoaderPlayer(this));
-		modInterface.RegisterScriptMod(new CosmeticLoaderTitle());
+		modInterface.RegisterScriptMod(new InventoryItemPatcher(this));
+		modInterface.RegisterScriptMod(new PlayerDataPatcher(this));
+		modInterface.RegisterScriptMod(new InventoryPactcher(this));
+		modInterface.RegisterScriptMod(new ItemSelectPatcher(this));
+		// modInterface.RegisterScriptMod(new GlobalsPatcher(this));
+		modInterface.RegisterScriptMod(new PlayerPatcher(this));
+		modInterface.RegisterScriptMod(new TitleScreenPatcher());
 		// modInterface.RegisterScriptMod(new ModScriptPatcher(this, versionTag, injectUpdateNotice));
 		modInterface.RegisterScriptMod(new ShopPatcher());
 		modInterface.RegisterScriptMod(new PlayerHudPatcher(this));
 		modInterface.RegisterScriptMod(new ShopButtonPatcher(this));
 		modInterface.RegisterScriptMod(new MenuPatcher(this, versionTag));
+		modInterface.RegisterScriptMod(new OptionsMenuPatcher());
+		modInterface.RegisterScriptMod(new EscMenuPatcher());
 		if (injectUpdateNotice) ;
 	}
 

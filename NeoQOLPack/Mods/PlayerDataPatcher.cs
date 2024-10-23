@@ -4,7 +4,7 @@ using GDWeave.Modding;
 
 namespace NeoQOLPack.Mods;
 
-public class InventoryStackerPlayerData(Mod mod) : IScriptMod
+public class PlayerDataPatcher(Mod mod) : IScriptMod
 {
 	public bool ShouldRun(string path) => path == "res://Scenes/Singletons/playerdata.gdc";
 
@@ -13,12 +13,35 @@ public class InventoryStackerPlayerData(Mod mod) : IScriptMod
 		MultiTokenWaiter entryWaiter = new MultiTokenWaiter([
 			t => t is IdentifierToken { Name: "_add_item" },
 			t => t is IdentifierToken { Name: "entry" },
-			t => t.Type == TokenType.Newline
+			t => t.Type is TokenType.Newline
 		], allowPartialMatch: true);
 
 		MultiTokenWaiter readyWaiter = new MultiTokenWaiter([
 			t => t is IdentifierToken { Name: "_ready" },
-			t => t.Type == TokenType.Newline
+			t => t.Type is TokenType.Newline
+		], allowPartialMatch: true);
+
+		MultiTokenWaiter resetWaiter = new MultiTokenWaiter([
+			t => t is IdentifierToken { Name: "_reset" },
+			t => t is IdentifierToken { Name: "player_options" },
+			t => t.Type is TokenType.OpAssign,
+			t => t.Type is TokenType.CurlyBracketOpen,
+			t => t.Type is TokenType.Newline
+		], allowPartialMatch: true);
+
+		
+		//if VERSION_MATCH and ( not stored_save.keys().has("version") or stored_save["version"] != Globals.GAME_VERSION):
+		// _reset_save()
+		// USING_SAVE = false
+		// return true
+		
+		MultiTokenWaiter storedSaveWaiter = new MultiTokenWaiter([
+			t=>t is IdentifierToken { Name: "_load_save" },
+			t => t.Type is TokenType.CfIf,
+			t => t is IdentifierToken {Name: "VERSION_MATCH"},
+			t => t.Type is TokenType.OpAnd,
+			t => t.Type is TokenType.CfReturn,
+			t => t.Type is TokenType.Newline
 		], allowPartialMatch: true);
 
 		MultiTokenWaiter loadedWaiter = new MultiTokenWaiter([
@@ -324,6 +347,49 @@ public class InventoryStackerPlayerData(Mod mod) : IScriptMod
 				//
 				
 				yield return new Token(TokenType.Newline, 1);
+			} else if (storedSaveWaiter.Check(token))
+			{
+				yield return token;
+
+				//if not stored_save["player_options"].keys().has("lockmouse"): stored_save["player_options"]["lockmouse"] = 0
+				yield return new Token(TokenType.CfIf);
+				yield return new Token(TokenType.OpNot);
+				yield return new IdentifierToken("stored_save");
+				yield return new Token(TokenType.BracketOpen);
+				yield return new ConstantToken(new StringVariant("player_options"));
+				yield return new Token(TokenType.BracketClose);
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("keys");
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new Token(TokenType.ParenthesisClose);
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("has");
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new ConstantToken(new StringVariant("lockmouse"));
+				yield return new Token(TokenType.ParenthesisClose);
+				yield return new Token(TokenType.Colon);
+				yield return new Token(TokenType.Newline, 2);
+				yield return new IdentifierToken("stored_save");
+				yield return new Token(TokenType.BracketOpen);
+				yield return new ConstantToken(new StringVariant("player_options"));
+				yield return new Token(TokenType.BracketClose);
+				yield return new Token(TokenType.BracketOpen);
+				yield return new ConstantToken(new StringVariant("lockmouse"));
+				yield return new Token(TokenType.BracketClose);
+				yield return new Token(TokenType.OpAssign);
+				yield return new ConstantToken(new IntVariant(0));
+				
+				yield return new Token(TokenType.Newline, 1);
+			} else if (resetWaiter.Check(token))
+			{
+				yield return token;
+
+				yield return new ConstantToken(new StringVariant("lockmouse"));
+				yield return new Token(TokenType.Colon);
+				yield return new ConstantToken(new IntVariant(0));
+				yield return new Token(TokenType.Comma);
+
+				yield return new Token(TokenType.Newline, 2);
 			}
 			else yield return token;
 		}

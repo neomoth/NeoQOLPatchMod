@@ -62,13 +62,6 @@ static func _append_entry(entry):
 	entry["stack_size"] = 0
 	entry["stacked"] = false
 
-static func _initialize_keys():
-	print("######################## INITIALIZING KEYS ########################")
-	for item in PlayerData.inventory:
-		if !item.has("locked"): item["locked"] = false
-		if !item.has("stack_size"): item["stack_size"] = 0 # note: stack size is zero indexed, 0 = 1, 1 = 2, etc
-		if !item.has("stacked"): item["stacked"] = false # tracks if item is considered stacked with another item
-
 static func _replace_player_label(title):
 	var parent = title.get_child(0)
 	var original = parent.get_child(1)
@@ -164,27 +157,3 @@ static func _add_mod_resource(file, file_name):
 	match type:
 		"cosmetic": Globals.cosmetic_data[file_name] = new
 		"item": Globals.item_data[file_name] = new
-
-static func _stack_items():
-	print("######################## STACKING ITEMS ########################")
-	var tools_to_stack = []
-	var items_marked_for_stack = []
-	
-	# Required to ensure everyone's save is updated with the new dictionary keys
-	for item in PlayerData.inventory:
-		var file = Globals.item_data[item["id"]]["file"]
-		if file.category == "tool":
-			var found_item = false
-			for t_item in tools_to_stack:
-				if item["id"] == t_item["id"]:
-					found_item = true
-					t_item["stack_size"] += 1
-					items_marked_for_stack.append(item)
-					break
-			if not found_item:
-				item["stack_size"] = 0
-				item["stacked"] = false
-				tools_to_stack.append(item)
-	
-	for item in items_marked_for_stack:
-		item["stacked"] = true

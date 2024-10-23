@@ -4,7 +4,7 @@ using GDWeave.Modding;
 
 namespace NeoQOLPack.Mods;
 
-public class CosmeticLoaderTitle : IScriptMod
+public class TitleScreenPatcher : IScriptMod
 {
 	public bool ShouldRun(string path) => path == "res://Scenes/Entities/Player/player_label.gdc";
 

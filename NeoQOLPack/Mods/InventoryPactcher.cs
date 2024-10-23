@@ -4,7 +4,7 @@ using GDWeave.Modding;
 
 namespace NeoQOLPack.Mods;
 
-public class InventoryStackerInventory(Mod mod) : IScriptMod
+public class InventoryPactcher(Mod mod) : IScriptMod
 {
 	public bool ShouldRun(string path) => path == "res://Scenes/HUD/inventory.gdc";
 
