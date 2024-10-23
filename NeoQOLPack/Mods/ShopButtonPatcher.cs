@@ -33,6 +33,8 @@ public class ShopButtonPatcher(Mod mod) : IScriptMod
 				yield return new Token(TokenType.Period);
 				yield return new IdentifierToken("text");
 				yield return new Token(TokenType.OpAssign);
+				yield return new IdentifierToken("prefix");
+				yield return new Token(TokenType.OpAdd);
 				yield return new IdentifierToken("get_node");
 				yield return new Token(TokenType.ParenthesisOpen);
 				yield return new ConstantToken(new StringVariant("/root/NeoQOLPack"));

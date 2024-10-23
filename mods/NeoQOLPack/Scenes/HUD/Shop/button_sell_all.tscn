@@ -1,0 +1,39 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Scenes/Singletons/Tooltips/tooltip_node.gd" type="Script" id=1]
+[ext_resource path="res://Assets/Themes/main.tres" type="Theme" id=2]
+[ext_resource path="res://mods/NeoQOLPack/Scenes/HUD/Shop/button_sell_all.gd" type="Script" id=3]
+
+[node name="Button2" type="Button"]
+margin_left = 741.0
+margin_top = 13.0
+margin_right = 842.0
+margin_bottom = 51.0
+theme = ExtResource( 2 )
+align = 0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="TooltipNode" type="Control" parent="."]
+margin_left = -2.0
+margin_right = 103.0
+margin_bottom = 38.0
+script = ExtResource( 1 )
+header = "Sell All Items"
+body = "This will sell every sellable item you have for about [color=green]$x[/color]."
+
+[node name="Label" type="RichTextLabel" parent="."]
+margin_left = 7.0
+margin_top = 2.0
+margin_right = 92.0
+margin_bottom = 36.0
+mouse_filter = 2
+bbcode_enabled = true
+bbcode_text = "[center][color=white]sell all[/color][/center]"
+text = "sell all"
+scroll_active = false
+
+[connection signal="mouse_entered" from="." to="." method="_on_Button2_mouse_entered"]
+[connection signal="pressed" from="." to="." method="_on_Button2_pressed"]

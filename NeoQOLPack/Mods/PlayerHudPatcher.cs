@@ -16,12 +16,16 @@ public class PlayerHudPatcher(Mod mod) : IScriptMod
 			t=>t.Type is TokenType.Colon,
 			t => t.Type is TokenType.Newline
 		], allowPartialMatch: false);
+
+		MultiTokenWaiter setupItemWaiter = new MultiTokenWaiter([
+			t=>t is IdentifierToken {Name: "_setup_item"},
+			t=>t.Type is TokenType.BracketClose
+		], allowPartialMatch: true);
 		
 		foreach (Token token in tokens)
 		{
 			if (chatWaiter.Check(token))
 			{
-				mod.Logger.Debug("HIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
 				yield return token;
 				yield return new Token(TokenType.Newline, 4);
 				yield return new ConstantToken(new StringVariant("/iamweest"));
@@ -51,6 +55,13 @@ public class PlayerHudPatcher(Mod mod) : IScriptMod
 				yield return new ConstantToken(new StringVariant("title_seventvowner"));
 				yield return new Token(TokenType.ParenthesisClose);
 				yield return new Token(TokenType.Newline, 4);
+			}
+			else if (setupItemWaiter.Check(token))
+			{
+				yield return token;
+
+				yield return new Token(TokenType.Comma);
+				yield return new ConstantToken(new BoolVariant(true));
 			}
 			else yield return token;
 		}

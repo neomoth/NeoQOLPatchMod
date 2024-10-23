@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Assets/Themes/panel_green.tres" type="StyleBox" id=1]
+[ext_resource path="res://mods/NeoQOLPack/Assets/Textures/Lock.svg" type="Texture" id=2]
+
+[node name="Panel2" type="Panel"]
+modulate = Color( 0.831373, 0.494118, 0.494118, 0.439216 )
+anchor_right = 0.046
+anchor_bottom = 0.083
+margin_left = 6.0
+margin_top = 6.0
+margin_right = -4.32001
+margin_bottom = -5.64001
+mouse_filter = 2
+custom_styles/panel = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="TextureRect2" type="TextureRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 17.0
+margin_top = 17.0
+margin_right = -17.0
+margin_bottom = -17.0
+mouse_filter = 2
+texture = ExtResource( 2 )
+expand = true

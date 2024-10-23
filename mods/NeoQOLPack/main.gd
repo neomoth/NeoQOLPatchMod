@@ -7,6 +7,7 @@ extends Node
 func _ready():
 	print("loaded")
 	_load_mod_resources()
+	var a = preload("res://mods/NeoQOLPack/test.gd")
 
 func _append_version(parent,version = "unknown"):
 	print("attaching label...")
@@ -54,6 +55,21 @@ static func _attach_stack_size(parent):
 	stack_size_label.anchor_bottom = 1
 	#print(parent)
 	return stack_size_label
+
+static func _attach_lock(parent):
+	var lock_icon: Panel = preload("res://mods/NeoQOLPack/Scenes/HUD/InventoryLock.tscn").instance()
+	parent.add_child(lock_icon)
+	lock_icon.margin_left = 6
+	lock_icon.margin_top = 6
+	lock_icon.margin_right = -6
+	lock_icon.margin_bottom = -6
+	lock_icon.rect_position = Vector2(6,6)
+	lock_icon.rect_size = Vector2(78,78)
+	lock_icon.anchor_left = 0
+	lock_icon.anchor_top = 0
+	lock_icon.anchor_right = 0.046
+	lock_icon.anchor_bottom = 0.083
+	return lock_icon
 
 static func _append_entry(entry):
 	print("######################## APPENDING ENTRY ########################")

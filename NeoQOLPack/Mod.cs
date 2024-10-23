@@ -15,7 +15,7 @@ public class Mod : IMod
 	public Config Config;
 	public ILogger Logger;
 
-	private static readonly string versionTag = "Beta5";
+	private static readonly string versionTag = "v1.0";
 	private static readonly string repo = "neomoth/NeoQOLPack";
 
 	private bool injectUpdateNotice = false;
@@ -37,6 +37,8 @@ public class Mod : IMod
 		modInterface.RegisterScriptMod(new MenuPatcher(this, versionTag));
 		modInterface.RegisterScriptMod(new OptionsMenuPatcher());
 		modInterface.RegisterScriptMod(new EscMenuPatcher());
+		modInterface.RegisterScriptMod(new ButtonSellPatcher());
+		modInterface.RegisterScriptMod(new ShopCategoryPatcher());
 		if (injectUpdateNotice) ;
 	}
 	
@@ -55,6 +57,15 @@ public class Mod : IMod
 				var currVer = Int32.Parse(Regex.Match(versionTag, @"\d+").Value);
 
 				injectUpdateNotice = newVer > currVer;
+			}
+			else
+			{
+				Version latest = new Version(latestVersion.StartsWith('v') ? latestVersion[1..] : latestVersion);
+				Version current = new Version(versionTag.StartsWith('v') ? versionTag[1..] : versionTag);
+
+				int comparison = latest.CompareTo(current);
+
+				injectUpdateNotice = comparison > 0;
 			}
 		}
 		catch (Exception e)

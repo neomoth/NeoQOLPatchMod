@@ -16,6 +16,17 @@ public class ShopPatcher : IScriptMod
 			t => t.Type is TokenType.Newline
 		], allowPartialMatch: true);
 
+		MultiTokenWaiter collapseWaiter = new MultiTokenWaiter([
+			t=>t.Type is TokenType.CfIf,
+			t=>t.Type is TokenType.OpNot,
+			t=>t is IdentifierToken {Name:"node"},
+			t=>t.Type is TokenType.Period,
+			t=>t is IdentifierToken {Name:"collapse"},
+			t=>t.Type is TokenType.Colon,
+			t=>t is IdentifierToken {Name:"add_child"},
+			t=>t.Type is TokenType.Newline,
+		], allowPartialMatch: true);
+
 		//if(node.name=="titles"): get_node("/root/Main")._append_shop_buttons(grid,self)
 		foreach (Token token in tokens)
 		{
@@ -44,6 +55,46 @@ public class ShopPatcher : IScriptMod
 				yield return new Token(TokenType.Self);
 				yield return new Token(TokenType.ParenthesisClose);
 
+				yield return new Token(TokenType.Newline, 2);
+			}
+			else if (collapseWaiter.Check(token))
+			{
+				yield return token;
+				
+				yield return new Token(TokenType.CfIf);
+				yield return new IdentifierToken("node");
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("name");
+				yield return new Token(TokenType.OpEqual);
+				yield return new ConstantToken(new StringVariant("sell"));
+				yield return new Token(TokenType.Colon);
+				yield return new IdentifierToken("node");
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("show_sellall");
+				yield return new Token(TokenType.OpAssign);
+				yield return new ConstantToken(new BoolVariant(true));
+				yield return new Token(TokenType.Newline, 2);
+				
+				yield return new Token(TokenType.CfIf);
+				yield return new IdentifierToken("node");
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("show_sellall");
+				yield return new Token(TokenType.Colon);
+				yield return new IdentifierToken("lbl");
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("add_child");
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new Token(TokenType.PrPreload);
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new ConstantToken(
+					new StringVariant("res://mods/NeoQOLPack/Scenes/HUD/Shop/button_sell_all.tscn"));
+				yield return new Token(TokenType.ParenthesisClose);
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("instance");
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new Token(TokenType.ParenthesisClose);
+				yield return new Token(TokenType.ParenthesisClose);
+				
 				yield return new Token(TokenType.Newline, 2);
 			}
 			else yield return token;
