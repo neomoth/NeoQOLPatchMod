@@ -28,12 +28,6 @@ public class PlayerDataPatcher(Mod mod) : IScriptMod
 			t => t.Type is TokenType.CurlyBracketOpen,
 			t => t.Type is TokenType.Newline
 		], allowPartialMatch: true);
-
-		
-		//if VERSION_MATCH and ( not stored_save.keys().has("version") or stored_save["version"] != Globals.GAME_VERSION):
-		// _reset_save()
-		// USING_SAVE = false
-		// return true
 		
 		MultiTokenWaiter storedSaveWaiter = new MultiTokenWaiter([
 			t=>t is IdentifierToken { Name: "_load_save" },
@@ -53,22 +47,9 @@ public class PlayerDataPatcher(Mod mod) : IScriptMod
 		{
 			if (entryWaiter.Check(token))
 			{
-				// mod.Logger.Information("#################### FOUND ENTRY FUNC ######################");
 				yield return token;
-				//if $"/root/MyModId":
 				
 				yield return new Token(TokenType.Newline, 1);
-				// yield return new Token(TokenType.Dollar);
-				// yield return new ConstantToken(new StringVariant("/root/NeoQOLPack"));
-				// yield return new Token(TokenType.Period);
-				// yield return new IdentifierToken("_append_entry");
-				// yield return new Token(TokenType.ParenthesisOpen);
-				// yield return new IdentifierToken("entry");
-				// yield return new Token(TokenType.ParenthesisClose);
-				
-				// entry["locked"] = false
-				// entry["stack_size"] = 0
-				// entry["stacked"] = false
 
 				yield return new IdentifierToken("entry");
 				yield return new Token(TokenType.BracketOpen);
@@ -95,17 +76,9 @@ public class PlayerDataPatcher(Mod mod) : IScriptMod
 			}
 			else if (readyWaiter.Check(token))
 			{
-				// mod.Logger.Information("#################### FOUND READY FUNC ######################");
 				yield return token;
 
 				yield return new Token(TokenType.Newline, 1);
-				// yield return new Token(TokenType.Dollar);
-				// yield return new ConstantToken(new StringVariant("/root/NeoQOLPack"));
-				// yield return new Token(TokenType.Period);
-				// yield return new IdentifierToken("_append_entry");
-				// yield return new Token(TokenType.ParenthesisOpen);
-				// yield return new IdentifierToken("FALLBACK_ITEM");
-				// yield return new Token(TokenType.ParenthesisClose);
 				
 				yield return new IdentifierToken("FALLBACK_ITEM");
 				yield return new Token(TokenType.BracketOpen);
@@ -133,13 +106,7 @@ public class PlayerDataPatcher(Mod mod) : IScriptMod
 			}
 			else if (loadedWaiter.Check(token))
 			{
-				// mod.Logger.Information("#################### FOUND LOAD FUNC ######################");
 				yield return token;
-
-				// for item in PlayerData.inventory:
-				// if !item.has("locked"): item["locked"] = false
-				// if !item.has("stack_size"): item["stack_size"] = 0 # note: stack size is zero indexed, 0 = 1, 1 = 2, etc
-				// if !item.has("stacked"): item["stacked"] = false # tracks if item is considered stacked with another item
 
 				yield return new Token(TokenType.CfFor);
 				yield return new IdentifierToken("item");
@@ -195,25 +162,6 @@ public class PlayerDataPatcher(Mod mod) : IScriptMod
 				yield return new Token(TokenType.OpAssign);
 				yield return new ConstantToken(new BoolVariant(false));
 				yield return new Token(TokenType.Newline, 1);
-				
-				
-				// yield return new Token(TokenType.Newline, 1);
-				// yield return new Token(TokenType.Dollar);
-				// yield return new ConstantToken(new StringVariant("/root/NeoQOLPack"));
-				// yield return new Token(TokenType.Period);
-				// yield return new IdentifierToken("_initialize_keys");
-				// yield return new Token(TokenType.ParenthesisOpen);
-				// yield return new Token(TokenType.ParenthesisClose);
-				// yield return new Token(TokenType.Newline, 1);
-				// yield return new Token(TokenType.Dollar);
-				// yield return new ConstantToken(new StringVariant("/root/NeoQOLPack"));
-				// yield return new Token(TokenType.Period);
-				// yield return new IdentifierToken("_stack_items");
-				// yield return new Token(TokenType.ParenthesisOpen);
-				// yield return new Token(TokenType.ParenthesisClose);
-				
-				
-				
 
 				yield return new Token(TokenType.PrVar);
 				yield return new IdentifierToken("tools_to_stack");
@@ -326,32 +274,12 @@ public class PlayerDataPatcher(Mod mod) : IScriptMod
 				yield return new Token(TokenType.ParenthesisOpen);
 				yield return new IdentifierToken("item");
 				yield return new Token(TokenType.ParenthesisClose);
-				// var tools_to_stack = []
-				// var items_marked_for_stack = []
-	
-				// # Required to ensure everyone's save is updated with the new dictionary keys
-				// for item in PlayerData.inventory:
-					// var file = Globals.item_data[item["id"]]["file"]
-					// if file.category == "tool":
-						// var found_item = false
-						// for t_item in tools_to_stack:
-							// if item["id"] == t_item["id"]:
-								// found_item = true
-								// t_item["stack_size"] += 1
-								// items_marked_for_stack.append(item)
-								// break
-						// if not found_item:
-						// item["stack_size"] = 0
-						// item["stacked"] = false
-						// tools_to_stack.append(item)
-				//
 				
 				yield return new Token(TokenType.Newline, 1);
 			} else if (storedSaveWaiter.Check(token))
 			{
 				yield return token;
 
-				//if not stored_save["player_options"].keys().has("lockmouse"): stored_save["player_options"]["lockmouse"] = 0
 				yield return new Token(TokenType.CfIf);
 				yield return new Token(TokenType.OpNot);
 				yield return new IdentifierToken("stored_save");

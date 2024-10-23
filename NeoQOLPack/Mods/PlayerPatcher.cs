@@ -19,7 +19,6 @@ public class PlayerPatcher(Mod mod) : IScriptMod
 			t => t is IdentifierToken {Name: "_get_input"},
 			t => t.Type is TokenType.CfIf,
 			t => t is IdentifierToken {Name: "busy"},
-			// t => t is IdentifierToken {Name: "MOUSE_MODE_VISIBLE"},
 			t => t.Type is TokenType.Newline
 		],allowPartialMatch: true);
 		
@@ -27,14 +26,11 @@ public class PlayerPatcher(Mod mod) : IScriptMod
 			t => t is IdentifierToken {Name: "_get_input"},
 			t => t.Type is TokenType.CfIf,
 			t => t is IdentifierToken {Name: "busy"},
-			// t => t is IdentifierToken {Name: "MOUSE_MODE_VISIBLE"},
 			t => t.Type is TokenType.ParenthesisOpen,
-			// t => t.Type is TokenType.Newline
 		],allowPartialMatch: true);
 		
 		MultiTokenWaiter elseWaiter = new MultiTokenWaiter([
 			t => t is IdentifierToken {Name: "_get_input"},
-			//if Input.mouse_mode != Input.MOUSE_MODE_VISIBLE
 			t => t.Type is TokenType.CfIf,
 			t => t is IdentifierToken {Name: "Input"},
 			t => t.Type is TokenType.Period,
@@ -59,28 +55,72 @@ public class PlayerPatcher(Mod mod) : IScriptMod
 			t => t.Type is TokenType.Newline
 		],allowPartialMatch: true);
 
-		//"/iamweest": PlayerData._unlock_cosmetic("title_streamerman")
-		// "/colonthreetimeseight": PlayerData._unlock_cosmetic("title_colonthreetimeseight")
-		// "/hithisisaveryhardstringtotrytoguesslol": PlayerData._unlock_cosmetic("title_seventvowner")
+		MultiTokenWaiter inputWaiter = new MultiTokenWaiter([
+			t => t is IdentifierToken { Name: "_get_input" },
+			t => t.Type is TokenType.ParenthesisOpen,
+			t => t.Type is TokenType.ParenthesisClose,
+			t => t.Type is TokenType.Colon,
+			t => t is IdentifierToken { Name: "_kiss" },
+			t => t.Type is TokenType.Newline
+		], allowPartialMatch: true);
+
+		MultiTokenWaiter equipWaiter = new MultiTokenWaiter([
+			t=>t is IdentifierToken {Name: "_equip_item"},
+			t=>t.Type is TokenType.ParenthesisOpen,
+			t=>t is IdentifierToken {Name: "item_data"},
+			t=>t.Type is TokenType.Comma,
+			t=>t is IdentifierToken {Name: "skip_anim"},
+			t=>t is IdentifierToken {Name: "forced"},
+			t=>t is IdentifierToken {Name: "set_prev"},
+			t=>t.Type is TokenType.Colon,
+			t=>t.Type is TokenType.CfIf,
+			t=>t is IdentifierToken {Name: "state"},
+			t=>t.Type is TokenType.OpAnd,
+			t=>t.Type is TokenType.OpNot,
+			t=>t is IdentifierToken {Name: "forced"},
+			t=>t.Type is TokenType.ParenthesisClose,
+		], allowPartialMatch: true);
 		
-		//if busy:
-		// 	if hud.menu == hud.MENUS.ESC: Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		// 	else: Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED if PlayerData.player_options.lockmouse else Input.MOUSE_MODE_VISIBLE)
-		// 	return 
-		// 
-		// if Input.is_action_pressed("secondary_action") or camera_zoom <= 0.0:
-		// 	if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
-		// 		PlayerData.original_mouse_position = get_tree().get_nodes_in_group("world_viewport")[0].get_mouse_position()
-		// 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-		// else :
-		// 	if Input.mouse_mode != Input.MOUSE_MODE_VISIBLE and Input.mouse_mode != Input.MOUSE_MODE_CONFINED:
-		// 		if hud.menu == hud.MENUS.ESC: Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		// 		else: Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED if PlayerData.player_options.lockmouse else Input.MOUSE_MODE_VISIBLE)
-		// 		Input.warp_mouse_position(PlayerData.original_mouse_position)
+		MultiTokenWaiter equipWaiter2 = new MultiTokenWaiter([
+			t=>t is IdentifierToken {Name: "_equip_item"},
+			t=>t.Type is TokenType.ParenthesisOpen,
+			t=>t is IdentifierToken {Name: "item_data"},
+			t=>t.Type is TokenType.Comma,
+			t=>t is IdentifierToken {Name: "skip_anim"},
+			t=>t is IdentifierToken {Name: "forced"},
+			t=>t is IdentifierToken {Name: "set_prev"},
+			t=>t.Type is TokenType.Colon,
+			t=>t.Type is TokenType.CfIf,
+			t=>t is IdentifierToken {Name: "state"},
+			t=>t.Type is TokenType.OpAnd,
+			t=>t.Type is TokenType.OpNot,
+			t=>t is IdentifierToken {Name: "forced"},
+			t=>t is IdentifierToken {Name: "held_item"},
+			t=>t is IdentifierToken {Name: "item_data"},
+			t=>t.Type is TokenType.BracketClose,
+		], allowPartialMatch: true);
+		
+		MultiTokenWaiter equipWaiter3 = new MultiTokenWaiter([
+			t=>t is IdentifierToken {Name: "_equip_item"},
+			t=>t.Type is TokenType.ParenthesisOpen,
+			t=>t is IdentifierToken {Name: "item_data"},
+			t=>t.Type is TokenType.Comma,
+			t=>t is IdentifierToken {Name: "skip_anim"},
+			t=>t is IdentifierToken {Name: "forced"},
+			t=>t is IdentifierToken {Name: "set_prev"},
+			t=>t.Type is TokenType.Colon,
+			t=>t.Type is TokenType.CfIf,
+			t=>t is IdentifierToken {Name: "state"},
+			t=>t.Type is TokenType.OpAnd,
+			t=>t.Type is TokenType.OpNot,
+			t=>t is IdentifierToken {Name: "forced"},
+			t=>t.Type is TokenType.Colon,
+			t=>t.Type is TokenType.CfReturn,
+			t=>t.Type is TokenType.Newline,
+		], allowPartialMatch: true);
 		
 		foreach (Token token in tokens)
 		{
-			// mod.Logger.Information(token.ToString());
 			if (readyWaiter.Check(token))
 			{
 				yield return token;
@@ -91,13 +131,59 @@ public class PlayerPatcher(Mod mod) : IScriptMod
 				yield return new Token(TokenType.ParenthesisOpen);
 				yield return new IdentifierToken("title");
 				yield return new Token(TokenType.ParenthesisClose);
-
+				yield return new Token(TokenType.Newline, 1);
+				
+				yield return new Token(TokenType.PrVar);
+				yield return new IdentifierToken("action_name");
+				yield return new Token(TokenType.OpAssign);
+				yield return new ConstantToken(new StringVariant("bind_unequip"));
+				yield return new Token(TokenType.Newline, 1);
+				
+				yield return new Token(TokenType.CfIf);
+				yield return new Token(TokenType.OpNot);
+				yield return new IdentifierToken("InputMap");
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("has_action");
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new IdentifierToken("action_name");
+				yield return new Token(TokenType.ParenthesisClose);
+				yield return new Token(TokenType.Colon);
+				yield return new Token(TokenType.Newline, 2);
+				yield return new Token(TokenType.PrVar);
+				yield return new IdentifierToken("key_event");
+				yield return new Token(TokenType.OpAssign);
+				yield return new IdentifierToken("InputEventKey");
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("new");
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new Token(TokenType.ParenthesisClose);
+				yield return new Token(TokenType.Newline, 2);
+				yield return new IdentifierToken("key_event");
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("scancode");
+				yield return new Token(TokenType.OpAssign);
+				yield return new IdentifierToken("KEY_QUOTELEFT");
+				yield return new Token(TokenType.Newline, 2);
+				yield return new IdentifierToken("InputMap");
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("add_action");
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new IdentifierToken("action_name");
+				yield return new Token(TokenType.ParenthesisClose);
+				yield return new Token(TokenType.Newline, 2);
+				yield return new IdentifierToken("InputMap");
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("action_add_event");
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new IdentifierToken("action_name");
+				yield return new Token(TokenType.Comma);
+				yield return new IdentifierToken("key_event");
+				yield return new Token(TokenType.ParenthesisClose);
 				yield return new Token(TokenType.Newline, 1);
 			}
 
 			else if (busyWaiter.Check(token))
 			{
-				mod.Logger.Information("found busy");
 				yield return token;
 				yield return new Token(TokenType.CfIf);
 				yield return new IdentifierToken("hud");
@@ -128,10 +214,6 @@ public class PlayerPatcher(Mod mod) : IScriptMod
 			{
 				yield return token;
 				
-				// yield return new IdentifierToken("Input");
-				// yield return new Token(TokenType.Period);
-				// yield return new IdentifierToken("set_mouse_mode");
-				// yield return new Token(TokenType.ParenthesisOpen);
 				yield return new IdentifierToken("Input");
 				yield return new Token(TokenType.Period);
 				yield return new IdentifierToken("MOUSE_MODE_CONFINED");
@@ -142,16 +224,9 @@ public class PlayerPatcher(Mod mod) : IScriptMod
 				yield return new Token(TokenType.Period);
 				yield return new IdentifierToken("lockmouse");
 				yield return new Token(TokenType.CfElse);
-				// yield return new IdentifierToken("Input");
-				// yield return new Token(TokenType.Period);
-				// yield return new IdentifierToken("MOUSE_MODE_VISIBLE");
-				// yield return new Token(TokenType.ParenthesisClose);
-				
-				// yield return new Token(TokenType.Newline, 2);
 			}
 			else if (elseWaiter.Check(token))
 			{
-				mod.Logger.Information("found else");
 				yield return token;
 				
 				yield return new Token(TokenType.OpAnd);
@@ -162,12 +237,9 @@ public class PlayerPatcher(Mod mod) : IScriptMod
 				yield return new IdentifierToken("Input");
 				yield return new Token(TokenType.Period);
 				yield return new IdentifierToken("MOUSE_MODE_CONFINED");
-
-				// yield return new Token(TokenType.Newline, 1);
 			}
 			else if (visibleWaiter.Check(token))
 			{
-				mod.Logger.Information("found visible");
 				yield return token;
 				yield return new Token(TokenType.CfIf);
 				yield return new IdentifierToken("hud");
@@ -211,6 +283,68 @@ public class PlayerPatcher(Mod mod) : IScriptMod
 				yield return new Token(TokenType.ParenthesisClose);
 				
 				yield return new Token(TokenType.Newline, 3);
+			}
+			else if (inputWaiter.Check(token))
+			{
+				yield return token;
+				
+				yield return new Token(TokenType.CfIf);
+				yield return new IdentifierToken("Input");
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("is_action_just_pressed");
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new ConstantToken(new StringVariant("bind_unequip"));
+				yield return new Token(TokenType.ParenthesisClose);
+				yield return new Token(TokenType.Colon);
+				yield return new IdentifierToken("_equip_item");
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new IdentifierToken("PlayerData");
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("FALLBACK_ITEM");
+				yield return new Token(TokenType.ParenthesisClose);
+
+				yield return new Token(TokenType.Newline, 1);
+			}
+			else if (equipWaiter.Check(token))
+			{
+				yield return token;
+				yield return new Token(TokenType.Colon);
+				yield return new Token(TokenType.CfReturn);
+				yield return new Token(TokenType.Newline, 1);
+				yield return new Token(TokenType.CfIf);
+				yield return new ConstantToken(new BoolVariant(false));
+				yield return new Token(TokenType.OpAnd);
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new ConstantToken(new BoolVariant(false));
+			}
+			else if (equipWaiter2.Check(token))
+			{
+				yield return token;
+
+				yield return new Token(TokenType.ParenthesisClose);
+			}
+			else if (equipWaiter3.Check(token))
+			{
+				yield return token;
+
+				yield return new Token(TokenType.CfIf);
+				yield return new IdentifierToken("held_item");
+				yield return new Token(TokenType.BracketOpen);
+				yield return new ConstantToken(new StringVariant("ref"));
+				yield return new Token(TokenType.BracketClose);
+				yield return new Token(TokenType.OpEqual);
+				yield return new IdentifierToken("item_data");
+				yield return new Token(TokenType.BracketOpen);
+				yield return new ConstantToken(new StringVariant("ref"));
+				yield return new Token(TokenType.BracketClose);
+				yield return new Token(TokenType.Colon);
+				yield return new IdentifierToken("item_data");
+				yield return new Token(TokenType.OpAssign);
+				yield return new IdentifierToken("PlayerData");
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("FALLBACK_ITEM");
+
+				yield return new Token(TokenType.Newline, 1);
 			}
 			else yield return token;
 		}

@@ -10,7 +10,7 @@ public class ShopButtonPatcher(Mod mod) : IScriptMod
 
 	public IEnumerable<Token> Modify(string path, IEnumerable<Token> tokens)
 	{
-		//price_label.text = prefix + str(cost)
+		
 		MultiTokenWaiter setWaiter = new MultiTokenWaiter([
 			t => t is IdentifierToken { Name: "price_label"},
 			t => t.Type is TokenType.Period,
@@ -26,10 +26,7 @@ public class ShopButtonPatcher(Mod mod) : IScriptMod
 		{
 			if (setWaiter.Check(token))
 			{
-				mod.Logger.Debug("awawawawawa loaded found whatever kys");
 				yield return token;
-				
-				//#price_label.text = get_node("/root/Main")._shorten_cost(cost)
 
 				yield return new Token(TokenType.Newline, 1);
 				yield return new IdentifierToken("price_label");

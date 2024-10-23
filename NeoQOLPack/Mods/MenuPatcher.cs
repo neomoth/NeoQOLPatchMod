@@ -139,12 +139,10 @@ public class MenuPatcher(Mod mod, string version) : IScriptMod
 			else if (buttonWaiter.Check(token))
 			{
 				yield return token;
-				mod.Logger.Debug("ough");
 				yield return new Token(TokenType.ParenthesisOpen);
 			}
 			else if (disabledWaiter.Check(token))
 			{
-				mod.Logger.Information("mhm yep found thang");
 				yield return token;
 
 				yield return new Token(TokenType.ParenthesisClose);

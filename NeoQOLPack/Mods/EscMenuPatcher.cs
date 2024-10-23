@@ -10,9 +10,6 @@ public class EscMenuPatcher : IScriptMod
 
 	public IEnumerable<Token> Modify(string path, IEnumerable<Token> tokens)
 	{
-		//$VBoxContainer.anchor_top = 0.35 if Network.PLAYING_OFFLINE else 0.32
-		// $VBoxContainer.anchor_bottom = 0.65 if Network.PLAYING_OFFLINE else 0.68
-
 		MultiTokenWaiter processWaiter = new MultiTokenWaiter([
 			t=>t is IdentifierToken {Name: "_process"},
 			t=>t.Type is TokenType.Newline
@@ -20,15 +17,19 @@ public class EscMenuPatcher : IScriptMod
 		
 		MultiTokenWaiter openWaiter = new MultiTokenWaiter([
 			t=>t is IdentifierToken {Name: "_open"},
+			t=>t.Type is TokenType.ParenthesisOpen,
+			t=>t.Type is TokenType.ParenthesisClose,
 			t=>t.Type is TokenType.Colon,
 			t=>t.Type is TokenType.Newline
-		], allowPartialMatch:true);
+		]);
 		
 		MultiTokenWaiter closeWaiter = new MultiTokenWaiter([
 			t=>t is IdentifierToken {Name: "_close"},
+			t=>t.Type is TokenType.ParenthesisOpen,
+			t=>t.Type is TokenType.ParenthesisClose,
 			t=>t.Type is TokenType.Colon,
 			t=>t.Type is TokenType.Newline
-		], allowPartialMatch:true);
+		]);
 
 		foreach (Token token in tokens)
 		{

@@ -10,7 +10,6 @@ public class TitleScreenPatcher : IScriptMod
 
 	public IEnumerable<Token> Modify(string path, IEnumerable<Token> tokens)
 	{
-		//$VBoxContainer / Label2.bbcode_text = "[center]"+title+"[/center]"
 		MultiTokenWaiter labelWaiter = new MultiTokenWaiter([
 			t=>t is IdentifierToken {Name:"_process"},
 			t=>t is IdentifierToken {Name:"title"},
