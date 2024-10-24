@@ -276,6 +276,20 @@ public class PlayerDataPatcher(Mod mod) : IScriptMod
 				yield return new Token(TokenType.ParenthesisClose);
 				
 				yield return new Token(TokenType.Newline, 1);
+				yield return new Token(TokenType.CfFor);
+				yield return new IdentifierToken("item");
+				yield return new Token(TokenType.OpIn);
+				yield return new IdentifierToken("items_marked_for_stack");
+				yield return new Token(TokenType.Colon);
+				yield return new Token(TokenType.Newline, 2);
+				yield return new IdentifierToken("item");
+				yield return new Token(TokenType.BracketOpen);
+				yield return new ConstantToken(new StringVariant("stacked"));
+				yield return new Token(TokenType.BracketClose);
+				yield return new Token(TokenType.OpAssign);
+				yield return new ConstantToken(new BoolVariant(true));
+				
+				yield return new Token(TokenType.Newline, 1);
 			} else if (storedSaveWaiter.Check(token))
 			{
 				yield return token;
