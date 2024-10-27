@@ -15,7 +15,7 @@ public class Mod : IMod
 	public Config Config;
 	public ILogger Logger;
 
-	private static readonly string versionTag = "v1.0.1";
+	private static readonly string versionTag = "v1.0.2";
 	private static readonly string repo = "neomoth/NeoQOLPack";
 
 	private bool injectUpdateNotice = false;
@@ -30,7 +30,7 @@ public class Mod : IMod
 		modInterface.RegisterScriptMod(new InventoryPactcher(this));
 		modInterface.RegisterScriptMod(new ItemSelectPatcher(this));
 		modInterface.RegisterScriptMod(new PlayerPatcher(this));
-		modInterface.RegisterScriptMod(new TitleScreenPatcher());
+		// modInterface.RegisterScriptMod(new PlayerTitlePatcher());
 		modInterface.RegisterScriptMod(new ShopPatcher());
 		modInterface.RegisterScriptMod(new PlayerHudPatcher(this));
 		modInterface.RegisterScriptMod(new ShopButtonPatcher(this));
