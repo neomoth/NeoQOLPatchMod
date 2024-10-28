@@ -1,4 +1,9 @@
 {
-  "Id": "NeoQOLPack",
-  "AssemblyPath": "NeoQOLPack.dll"
+    "Id": "NeoQOLPack",
+    "PackPath": "NeoQOLPack.pck",
+    "AssemblyPath": "NeoQOLPack.dll",
+    "Dependencies":
+    [
+        "Sulayre.Lure"
+    ]
 }
