@@ -34,7 +34,7 @@ public class PlayerHudPatcher(Mod mod) : IScriptMod
 				yield return new Token(TokenType.Period);
 				yield return new IdentifierToken("_unlock_cosmetic");
 				yield return new Token(TokenType.ParenthesisOpen);
-				yield return new ConstantToken(new StringVariant("title_streamerman"));
+				yield return new ConstantToken(new StringVariant("NeoQOLPack.title_streamerman"));
 				yield return new Token(TokenType.ParenthesisClose);
 				yield return new Token(TokenType.Newline, 4);
 				yield return new ConstantToken(new StringVariant("/colonthreetimeseight"));
@@ -43,7 +43,7 @@ public class PlayerHudPatcher(Mod mod) : IScriptMod
 				yield return new Token(TokenType.Period);
 				yield return new IdentifierToken("_unlock_cosmetic");
 				yield return new Token(TokenType.ParenthesisOpen);
-				yield return new ConstantToken(new StringVariant("title_colonthreetimeseight"));
+				yield return new ConstantToken(new StringVariant("NeoQOLPack.title_colonthreetimeseight"));
 				yield return new Token(TokenType.ParenthesisClose);
 				yield return new Token(TokenType.Newline, 4);
 				yield return new ConstantToken(new StringVariant("/hithisisaveryhardstringtotrytoguesslol"));
@@ -52,7 +52,7 @@ public class PlayerHudPatcher(Mod mod) : IScriptMod
 				yield return new Token(TokenType.Period);
 				yield return new IdentifierToken("_unlock_cosmetic");
 				yield return new Token(TokenType.ParenthesisOpen);
-				yield return new ConstantToken(new StringVariant("title_seventvowner"));
+				yield return new ConstantToken(new StringVariant("NeoQOLPack.title_seventvowner"));
 				yield return new Token(TokenType.ParenthesisClose);
 				yield return new Token(TokenType.Newline, 4);
 			}

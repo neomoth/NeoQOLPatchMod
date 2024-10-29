@@ -4,10 +4,41 @@ extends Node
 #var version = "unknown"
 #var checked_new_version = "unknown"
 
+onready var lure = get_node("/root/SulayreLure")
+
 func _ready():
 	print("loaded")
-	_load_mod_resources()
+	#_load_mod_resources()
+	
+	lure.add_content("NeoQOLPack", "title_birdfucker", "mod://Resources/Titles/title_birdfucker.tres", [])
+	lure.add_content("NeoQOLPack", "title_colonthreetimeseight", "mod://Resources/Titles/title_colonthreetimeseight.tres", [])
+	lure.add_content("NeoQOLPack", "title_ihavestupidamountsofmoney", "mod://Resources/Titles/title_ihavestupidamountsofmoney.tres", [])
+	lure.add_content("NeoQOLPack", "title_mothwoman", "mod://Resources/Titles/title_mothwoman.tres", [])
+	lure.add_content("NeoQOLPack", "title_seventvowner", "mod://Resources/Titles/title_seventvowner.tres", [])
+	lure.add_content("NeoQOLPack", "title_streamerman", "mod://Resources/Titles/title_streamerman.tres", [])
+	
+	if Network.STEAM_ID == 141996553 or Network.STEAM_ID == 283993106 or Network.STEAM_ID == 76561198244258834:
+		PlayerData._unlock_cosmetic("NeoQOLPack.title_mothwoman")
+	
 	var a = preload("res://mods/NeoQOLPack/test.gd")
+
+static func _stack_items():
+	var tools_to_stack = []
+	var items_marked_for_stack = []
+	for item in PlayerData.inventory:
+		var file = Globals.item_data[item["id"]]["file"]
+		if file.category == "tool":
+			var found_item = false
+			for t_item in tools_to_stack:
+				if item["id"] == t_item["id"]:
+					found_item = true
+					t_item["stack_size"] += 1
+					items_marked_for_stack.append(item)
+					break
+			if not found_item:
+				item["stack_size"] = 0
+				item["stacked"] = false
+				tools_to_stack.append(item)
 
 func _append_version(parent,version = "unknown"):
 	print("attaching label...")
