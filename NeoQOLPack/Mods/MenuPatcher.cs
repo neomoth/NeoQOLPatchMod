@@ -68,6 +68,7 @@ public class MenuPatcher(Mod mod, string version) : IScriptMod
 			if (extendsWaiter.Check(token))
 			{
 				yield return token;
+				if (mod.modInterface.LoadedMods.Contains("WebfishingPlus")) continue;
 				yield return new Token(TokenType.PrVar);
 				yield return new IdentifierToken("offline_selected");
 				yield return new Token(TokenType.OpAssign);
@@ -123,6 +124,7 @@ public class MenuPatcher(Mod mod, string version) : IScriptMod
 				yield return new ConstantToken(new StringVariant(version));
 				yield return new Token(TokenType.ParenthesisClose);
 				yield return new Token(TokenType.Newline, 1);
+				if (mod.modInterface.LoadedMods.Contains("WebfishingPlus")) continue;
 				yield return new Token(TokenType.Dollar);
 				yield return new ConstantToken(new StringVariant("%serv_options"));
 				yield return new Token(TokenType.Period);
@@ -139,12 +141,13 @@ public class MenuPatcher(Mod mod, string version) : IScriptMod
 			else if (buttonWaiter.Check(token))
 			{
 				yield return token;
+				if (mod.modInterface.LoadedMods.Contains("WebfishingPlus")) continue;
 				yield return new Token(TokenType.ParenthesisOpen);
 			}
 			else if (disabledWaiter.Check(token))
 			{
 				yield return token;
-
+				if (mod.modInterface.LoadedMods.Contains("WebfishingPlus")) continue;
 				yield return new Token(TokenType.ParenthesisClose);
 				yield return new Token(TokenType.OpAnd);
 				yield return new Token(TokenType.OpNot);

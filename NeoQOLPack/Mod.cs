@@ -31,7 +31,6 @@ public class Mod : IMod
 		modInterface.RegisterScriptMod(new InventoryPactcher(this));
 		modInterface.RegisterScriptMod(new ItemSelectPatcher(this));
 		modInterface.RegisterScriptMod(new PlayerPatcher(this));
-		// modInterface.RegisterScriptMod(new PlayerTitlePatcher());
 		modInterface.RegisterScriptMod(new ShopPatcher());
 		modInterface.RegisterScriptMod(new PlayerHudPatcher(this));
 		modInterface.RegisterScriptMod(new ShopButtonPatcher(this));
