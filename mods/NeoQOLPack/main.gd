@@ -143,7 +143,7 @@ static func _shorten_cost(cost):
 static func _append_shop_buttons(parent,ref):
 	var button = preload("res://Scenes/HUD/Shop/ShopButtons/shop_button.tscn").instance()
 	button.set_script(preload("res://Scenes/HUD/Shop/ShopButtons/button_cosmetic_unlock.gd"))
-	button.cosmetic_unlock = "title_ihavestupidamountsofmoney"
+	button.cosmetic_unlock = "NeoQOLPack.title_ihavestupidamountsofmoney"
 	#button.cosmetic_unlock = item
 	button.cost = 999999
 	#button.cost = Globals.cosmetic_data[item]["file"].cost
