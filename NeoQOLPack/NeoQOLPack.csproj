@@ -13,7 +13,6 @@
 
     <ItemGroup>
         <None Include="manifest.json" CopyToOutputDirectory="PreserveNewest"/>
-        <None Include="mod.json" CopyToOutputDirectory="PreserveNewest"/>
     </ItemGroup>
 
     <ItemGroup>

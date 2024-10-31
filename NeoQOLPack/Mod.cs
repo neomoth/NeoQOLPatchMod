@@ -52,17 +52,17 @@ public class Mod : IMod
 			if (currentDir is null)
 				throw new NullReferenceException(
 					"if this gets thrown i have no fucking idea how you managed to do that.");
-			string jsonPath = Path.Combine(currentDir, "mod.json");
+			string jsonPath = Path.Combine(currentDir, "manifest.json");
 			if (!File.Exists(jsonPath))
-				throw new FileNotFoundException("mod.json was not found in the mod's directory.");
+				throw new FileNotFoundException("manifest.json was not found in the mod's directory.");
 			string jsonContent = File.ReadAllText(jsonPath);
 			JsonDocument document = JsonDocument.Parse(jsonContent);
-			if (document.RootElement.TryGetProperty("version", out JsonElement version))
+			if (document.RootElement.GetProperty("Metadata").TryGetProperty("Version", out JsonElement version))
 			{
 				string? versionAsString = version.GetString();
 				if (versionAsString is not null) versionTag = $"v{versionAsString}";
 			}
-			else throw new Exception("'version' property not found in mod.json.");
+			else throw new Exception("'version' property not found in manifest.json.");
 		}
 		catch (Exception e)
 		{
