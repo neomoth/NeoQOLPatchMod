@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://Assets/Themes/panel_green.tres" type="StyleBox" id=1]
+[ext_resource path="res://mods/NeoQOLPack/ModThemes/panel_green.tres" type="StyleBox" id=1]
 [ext_resource path="res://mods/NeoQOLPack/Assets/Textures/Lock.svg" type="Texture" id=2]
 
 [node name="Panel2" type="Panel"]
@@ -20,10 +20,10 @@ __meta__ = {
 [node name="TextureRect2" type="TextureRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 17.0
-margin_top = 17.0
-margin_right = -17.0
-margin_bottom = -17.0
+margin_left = 9.0
+margin_top = 9.0
+margin_right = -8.78399
+margin_bottom = -9.15999
 mouse_filter = 2
 texture = ExtResource( 2 )
 expand = true

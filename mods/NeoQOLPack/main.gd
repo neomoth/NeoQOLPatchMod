@@ -20,7 +20,7 @@ func _ready():
 	if Network.STEAM_ID == 141996553 or Network.STEAM_ID == 283993106 or Network.STEAM_ID == 76561198244258834:
 		PlayerData._unlock_cosmetic("NeoQOLPack.title_mothwoman")
 	
-	var a = preload("res://mods/NeoQOLPack/test.gd")
+	#var a = preload("res://mods/NeoQOLPack/test.gd")
 
 static func _stack_items():
 	var tools_to_stack = []
@@ -72,7 +72,7 @@ static func _apply_stack_visual(display_stacked,idata,stack_size):
 
 static func _attach_stack_size(parent):
 	#print("######################## ATTACHING LABEL ########################")
-	var stack_size_label: Label = preload("res://mods/NeoQOLPack/Scenes/HUD/StackSize.tscn").instance()
+	var stack_size_label: Label = load("res://mods/NeoQOLPack/Scenes/HUD/StackSize.tscn").instance()
 	parent.add_child(stack_size_label)
 	stack_size_label.rect_position = Vector2(41.74,51)
 	stack_size_label.rect_size = Vector2(41.26,34)
@@ -88,7 +88,7 @@ static func _attach_stack_size(parent):
 	return stack_size_label
 
 static func _attach_lock(parent):
-	var lock_icon: Panel = preload("res://mods/NeoQOLPack/Scenes/HUD/InventoryLock.tscn").instance()
+	var lock_icon: Panel = load("res://mods/NeoQOLPack/Scenes/HUD/InventoryLock.tscn").instance()
 	parent.add_child(lock_icon)
 	lock_icon.margin_left = 6
 	lock_icon.margin_top = 6
@@ -120,7 +120,7 @@ static func _replace_player_label(title):
 	parent.remove_child(original)
 	original.queue_free()
 	var label:RichTextLabel = RichTextLabel.new()
-	label.add_font_override("normal_font", preload("res://mods/NeoQOLPack/Themes/player_title.tres"))
+	label.add_font_override("normal_font", load("res://mods/NeoQOLPack/Themes/player_title.tres"))
 	label.bbcode_enabled = true
 	label.name = "Label2"
 	label.bbcode_text = original_text
@@ -141,8 +141,8 @@ static func _shorten_cost(cost):
 	return str(cost)
 
 static func _append_shop_buttons(parent,ref):
-	var button = preload("res://Scenes/HUD/Shop/ShopButtons/shop_button.tscn").instance()
-	button.set_script(preload("res://Scenes/HUD/Shop/ShopButtons/button_cosmetic_unlock.gd"))
+	var button = load("res://Scenes/HUD/Shop/ShopButtons/shop_button.tscn").instance()
+	button.set_script(load("res://Scenes/HUD/Shop/ShopButtons/button_cosmetic_unlock.gd"))
 	button.cosmetic_unlock = "NeoQOLPack.title_ihavestupidamountsofmoney"
 	#button.cosmetic_unlock = item
 	button.cost = 999999

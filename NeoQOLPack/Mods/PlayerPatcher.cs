@@ -124,21 +124,20 @@ public class PlayerPatcher(Mod mod) : IScriptMod
 			if (readyWaiter.Check(token))
 			{
 				yield return token;
-				yield return new Token(TokenType.Dollar);
-				yield return new ConstantToken(new StringVariant("/root/NeoQOLPack"));
-				yield return new Token(TokenType.Period);
-				yield return new IdentifierToken("_replace_player_label");
-				yield return new Token(TokenType.ParenthesisOpen);
-				yield return new IdentifierToken("title");
-				yield return new Token(TokenType.ParenthesisClose);
-				yield return new Token(TokenType.Newline, 1);
+				// yield return new Token(TokenType.Dollar);
+				// yield return new ConstantToken(new StringVariant("/root/NeoQOLPack"));
+				// yield return new Token(TokenType.Period);
+				// yield return new IdentifierToken("_replace_player_label");
+				// yield return new Token(TokenType.ParenthesisOpen);
+				// yield return new IdentifierToken("title");
+				// yield return new Token(TokenType.ParenthesisClose);
+				// yield return new Token(TokenType.Newline, 1);
 				
 				yield return new Token(TokenType.PrVar);
 				yield return new IdentifierToken("action_name");
 				yield return new Token(TokenType.OpAssign);
 				yield return new ConstantToken(new StringVariant("bind_unequip"));
 				yield return new Token(TokenType.Newline, 1);
-				
 				yield return new Token(TokenType.CfIf);
 				yield return new Token(TokenType.OpNot);
 				yield return new IdentifierToken("InputMap");
