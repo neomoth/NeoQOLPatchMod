@@ -10,7 +10,7 @@
     {
         "Name": "NeoOQLPack",
         "Description": "Collection of Quality of Life patches such as inventory stacking, a sell all button, etcetera.",
-        "Version": "1.0.6",
+        "Version": "1.1.0",
         "Author": "neomoth"
     }
 }
