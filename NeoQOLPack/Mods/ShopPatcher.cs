@@ -74,6 +74,12 @@ public class ShopPatcher : IScriptMod
 				yield return new Token(TokenType.OpAssign);
 				yield return new ConstantToken(new BoolVariant(true));
 				yield return new Token(TokenType.Newline, 2);
+
+				yield return new Token(TokenType.BuiltInFunc, (uint?)BuiltinFunction.TextPrint);
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new ConstantToken(new StringVariant("bla bla bla"));
+				yield return new Token(TokenType.ParenthesisClose);
+				yield return new Token(TokenType.Newline, 2);
 				
 				yield return new Token(TokenType.CfIf);
 				yield return new IdentifierToken("node");
@@ -84,7 +90,7 @@ public class ShopPatcher : IScriptMod
 				yield return new Token(TokenType.Period);
 				yield return new IdentifierToken("add_child");
 				yield return new Token(TokenType.ParenthesisOpen);
-				yield return new Token(TokenType.PrPreload);
+				yield return new Token(TokenType.BuiltInFunc, (uint?)BuiltinFunction.ResourceLoad);
 				yield return new Token(TokenType.ParenthesisOpen);
 				yield return new ConstantToken(
 					new StringVariant("res://mods/NeoQOLPack/Scenes/HUD/Shop/button_sell_all.tscn"));
@@ -95,6 +101,12 @@ public class ShopPatcher : IScriptMod
 				yield return new Token(TokenType.ParenthesisClose);
 				yield return new Token(TokenType.ParenthesisClose);
 				
+				yield return new Token(TokenType.Newline, 2);
+				
+				yield return new Token(TokenType.BuiltInFunc, (uint?)BuiltinFunction.TextPrint);
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new ConstantToken(new StringVariant("gwa gwa gwa"));
+				yield return new Token(TokenType.ParenthesisClose);
 				yield return new Token(TokenType.Newline, 2);
 			}
 			else yield return token;

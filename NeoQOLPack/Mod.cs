@@ -35,10 +35,11 @@ public class Mod : IMod
 		modInterface.RegisterScriptMod(new PlayerHudPatcher(this));
 		modInterface.RegisterScriptMod(new ShopButtonPatcher(this));
 		modInterface.RegisterScriptMod(new MenuPatcher(this, versionTag));
-		modInterface.RegisterScriptMod(new OptionsMenuPatcher());
+		modInterface.RegisterScriptMod(new OptionsMenuPatcher(this));
 		modInterface.RegisterScriptMod(new EscMenuPatcher());
 		modInterface.RegisterScriptMod(new ButtonSellPatcher());
 		modInterface.RegisterScriptMod(new ShopCategoryPatcher());
+		modInterface.RegisterScriptMod(new CosmeticMenuPatcher());
 		if (injectUpdateNotice) ;
 	}
 	

@@ -10,17 +10,64 @@ func _ready():
 	print("loaded")
 	#_load_mod_resources()
 	
+	#lure.assign_pattern_texture("NeoQOLPack", "NeoQOLPack.koni_pattern", "species_cat", "")
+	
+	lure.add_content("NeoQOLPack", "koni_antennae", "res://mods/NeoQOLPack/Resources/Cosmetics/koni_antennae.tres")
+	lure.add_content("NeoQOLPack", "koni_wings", "res://mods/NeoQOLPack/Resources/Cosmetics/koni_wings.tres")
+	lure.add_content("NeoQOLPack", "koni_fluff", "res://mods/NeoQOLPack/Resources/Cosmetics/koni_fluff.tres")
+	lure.add_content("NeoQOLPack", "eye_koni", "res://mods/NeoQOLPack/Resources/Cosmetics/eye_koni.tres")
+	lure.add_content("NeoQOLPack", "pcolor_koni1", "res://mods/NeoQOLPack/Resources/Cosmetics/pcolor_koni1.tres")
+	lure.add_content("NeoQOLPack", "pcolor_koni2", "res://mods/NeoQOLPack/Resources/Cosmetics/pcolor_koni2.tres")
+	lure.add_content("NeoQOLPack", "koni_cheeks", "res://mods/NeoQOLPack/Resources/Cosmetics/koni_cheeks.tres")
+	lure.add_content("NeoQOLPack", "koni_pattern", "res://mods/NeoQOLPack/Resources/Cosmetics/koni_pattern.tres")
 	lure.add_content("NeoQOLPack", "title_birdfucker", "mod://Resources/Titles/title_birdfucker.tres", [])
 	lure.add_content("NeoQOLPack", "title_colonthreetimeseight", "mod://Resources/Titles/title_colonthreetimeseight.tres", [])
 	lure.add_content("NeoQOLPack", "title_ihavestupidamountsofmoney", "mod://Resources/Titles/title_ihavestupidamountsofmoney.tres", [])
-	lure.add_content("NeoQOLPack", "title_mothwoman", "mod://Resources/Titles/title_mothwoman.tres", [])
+	lure.add_content("NeoQOLPack", "title_mothwoman", "mod://Resources/Titles/title_mothwoman.tres")
 	lure.add_content("NeoQOLPack", "title_seventvowner", "mod://Resources/Titles/title_seventvowner.tres", [])
 	lure.add_content("NeoQOLPack", "title_streamerman", "mod://Resources/Titles/title_streamerman.tres", [])
 	
-	if Network.STEAM_ID == 141996553 or Network.STEAM_ID == 283993106 or Network.STEAM_ID == 76561198244258834:
-		PlayerData._unlock_cosmetic("NeoQOLPack.title_mothwoman")
+	get_tree().root.connect("child_entered_tree", self, "_on_root_child_enter")
 	
-	#var a = preload("res://mods/NeoQOLPack/test.gd")
+	var a = preload("res://mods/NeoQOLPack/test.gd")
+
+func _on_root_child_enter(node):
+	print("node entered root")
+	if node.name == "playerhud":
+		print("playerhud found")
+		if Network.STEAM_ID == 76561198244258834:
+			PlayerData._unlock_cosmetic("NeoQOLPack.koni_antennae")
+			PlayerData._unlock_cosmetic("NeoQOLPack.koni_wings")
+			PlayerData._unlock_cosmetic("NeoQOLPack.koni_fluff")
+			PlayerData._unlock_cosmetic("NeoQOLPack.title_mothwoman")
+			PlayerData._unlock_cosmetic("NeoQOLPack.eye_koni")
+			PlayerData._unlock_cosmetic("NeoQOLPack.pcolor_koni1")
+			PlayerData._unlock_cosmetic("NeoQOLPack.pcolor_koni2")
+			PlayerData._unlock_cosmetic("NeoQOLPack.koni_cheeks")
+			PlayerData._unlock_cosmetic("NeoQOLPack.koni_pattern")
+
+func get_clipping_ancestor(obj):
+	var current = obj.get_parent()
+	while current:
+		if current.is_class("Control") and current.rect_clip_content:
+			return current
+		current = current.get_parent()
+	return null
+
+func is_clipped(obj, parent):
+	var clipping_ancestor
+	if parent == null: clipping_ancestor = get_clipping_ancestor(obj)
+	else: clipping_ancestor = parent
+	if clipping_ancestor == null:
+		return false
+	var ancestor_rect = Rect2(Vector2.ZERO, clipping_ancestor.rect_size)
+	var global_rect = Rect2(obj.rect_global_position, obj.rect_size)
+	
+	ancestor_rect.position = clipping_ancestor.rect_global_position
+	return not ancestor_rect.intersects(global_rect)
+
+func _patch_inventory_scroll():
+	pass
 
 static func _stack_items():
 	var tools_to_stack = []
@@ -72,7 +119,7 @@ static func _apply_stack_visual(display_stacked,idata,stack_size):
 
 static func _attach_stack_size(parent):
 	#print("######################## ATTACHING LABEL ########################")
-	var stack_size_label: Label = load("res://mods/NeoQOLPack/Scenes/HUD/StackSize.tscn").instance()
+	var stack_size_label: Label = preload("res://mods/NeoQOLPack/Scenes/HUD/StackSize.tscn").instance()
 	parent.add_child(stack_size_label)
 	stack_size_label.rect_position = Vector2(41.74,51)
 	stack_size_label.rect_size = Vector2(41.26,34)
@@ -88,7 +135,7 @@ static func _attach_stack_size(parent):
 	return stack_size_label
 
 static func _attach_lock(parent):
-	var lock_icon: Panel = load("res://mods/NeoQOLPack/Scenes/HUD/InventoryLock.tscn").instance()
+	var lock_icon: Panel = preload("res://mods/NeoQOLPack/Scenes/HUD/InventoryLock.tscn").instance()
 	parent.add_child(lock_icon)
 	lock_icon.margin_left = 6
 	lock_icon.margin_top = 6
@@ -120,7 +167,7 @@ static func _replace_player_label(title):
 	parent.remove_child(original)
 	original.queue_free()
 	var label:RichTextLabel = RichTextLabel.new()
-	label.add_font_override("normal_font", load("res://mods/NeoQOLPack/Themes/player_title.tres"))
+#	label.add_font_override("normal_font", preload("res://mods/NeoQOLPack/Themes/player_title.tres"))
 	label.bbcode_enabled = true
 	label.name = "Label2"
 	label.bbcode_text = original_text

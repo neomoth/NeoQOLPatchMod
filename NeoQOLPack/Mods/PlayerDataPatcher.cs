@@ -322,6 +322,35 @@ public class PlayerDataPatcher(Mod mod) : IScriptMod
 				yield return new ConstantToken(new IntVariant(0));
 				
 				yield return new Token(TokenType.Newline, 1);
+				
+				// yield return new Token(TokenType.CfIf);
+				// yield return new Token(TokenType.OpNot);
+				// yield return new IdentifierToken("stored_save");
+				// yield return new Token(TokenType.BracketOpen);
+				// yield return new ConstantToken(new StringVariant("player_options"));
+				// yield return new Token(TokenType.BracketClose);
+				// yield return new Token(TokenType.Period);
+				// yield return new IdentifierToken("keys");
+				// yield return new Token(TokenType.ParenthesisOpen);
+				// yield return new Token(TokenType.ParenthesisClose);
+				// yield return new Token(TokenType.Period);
+				// yield return new IdentifierToken("has");
+				// yield return new Token(TokenType.ParenthesisOpen);
+				// yield return new ConstantToken(new StringVariant("fovscale"));
+				// yield return new Token(TokenType.ParenthesisClose);
+				// yield return new Token(TokenType.Colon);
+				// yield return new Token(TokenType.Newline, 2);
+				// yield return new IdentifierToken("stored_save");
+				// yield return new Token(TokenType.BracketOpen);
+				// yield return new ConstantToken(new StringVariant("player_options"));
+				// yield return new Token(TokenType.BracketClose);
+				// yield return new Token(TokenType.BracketOpen);
+				// yield return new ConstantToken(new StringVariant("fovscale"));
+				// yield return new Token(TokenType.BracketClose);
+				// yield return new Token(TokenType.OpAssign);
+				// yield return new ConstantToken(new IntVariant(50));
+				//
+				// yield return new Token(TokenType.Newline, 1);
 			} else if (resetWaiter.Check(token))
 			{
 				yield return token;
@@ -332,6 +361,13 @@ public class PlayerDataPatcher(Mod mod) : IScriptMod
 				yield return new Token(TokenType.Comma);
 
 				yield return new Token(TokenType.Newline, 2);
+				
+				// yield return new ConstantToken(new StringVariant("fovscale"));
+				// yield return new Token(TokenType.Colon);
+				// yield return new ConstantToken(new IntVariant(0));
+				// yield return new Token(TokenType.Comma);
+				//
+				// yield return new Token(TokenType.Newline, 50);
 			}
 			else yield return token;
 		}

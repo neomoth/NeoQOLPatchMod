@@ -1,0 +1,28 @@
+[gd_resource type="Resource" load_steps=5 format=2]
+
+[ext_resource path="res://Resources/Scripts/cosmetic_resource.gd" type="Script" id=1]
+[ext_resource path="res://Assets/Textures/fly.png" type="Texture" id=2]
+[ext_resource path="res://mods/NeoQOLPack/Assets/Models/koni_fluff.tres" type="ArrayMesh" id=3]
+
+[sub_resource type="SpatialMaterial" id=1]
+albedo_color = Color( 0.45098, 0.407843, 0.768627, 1 )
+
+[resource]
+script = ExtResource( 1 )
+name = "Koni Fluff"
+desc = "moff"
+title = ""
+icon = ExtResource( 2 )
+mesh = ExtResource( 3 )
+species_alt_mesh = [  ]
+material = SubResource( 1 )
+main_color = Color( 1, 1, 1, 1 )
+body_pattern = [  ]
+mirror_face = true
+flip = false
+allow_blink = true
+category = "accessory"
+cos_internal_id = 0
+in_rotation = false
+chest_reward = false
+cost = 10

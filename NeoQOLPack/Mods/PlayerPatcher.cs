@@ -10,6 +10,11 @@ public class PlayerPatcher(Mod mod) : IScriptMod
 
 	public IEnumerable<Token> Modify(string path, IEnumerable<Token> tokens)
 	{
+		MultiTokenWaiter extendsWaiter = new MultiTokenWaiter([
+			t=>t.Type is TokenType.PrExtends,
+			t=>t.Type is TokenType.Newline
+		], allowPartialMatch: true);
+		
 		MultiTokenWaiter readyWaiter = new MultiTokenWaiter([
 			t => t is IdentifierToken {Name: "_ready"},
 			t => t.Type is TokenType.Newline
@@ -99,6 +104,13 @@ public class PlayerPatcher(Mod mod) : IScriptMod
 			t=>t is IdentifierToken {Name: "item_data"},
 			t=>t.Type is TokenType.BracketClose,
 		], allowPartialMatch: true);
+
+		MultiTokenWaiter cameraUpdateWaiter = new MultiTokenWaiter([
+			t=>t.Type is TokenType.PrVar,
+			t=>t is IdentifierToken {Name: "desired_fov"},
+			t=>t.Type is TokenType.OpAssign,
+			t=>t is ConstantToken {Value: IntVariant {Value: 50}},
+		], allowPartialMatch: true);
 		
 		MultiTokenWaiter equipWaiter3 = new MultiTokenWaiter([
 			t=>t is IdentifierToken {Name: "_equip_item"},
@@ -118,10 +130,38 @@ public class PlayerPatcher(Mod mod) : IScriptMod
 			t=>t.Type is TokenType.CfReturn,
 			t=>t.Type is TokenType.Newline,
 		], allowPartialMatch: true);
+
+		MultiTokenWaiter updateCosmeticsWaiter = new MultiTokenWaiter([
+			t=>t.Type is TokenType.PrFunction,
+			t=>t is IdentifierToken {Name: "_update_cosmetics"},
+			t=>t.Type is TokenType.ParenthesisOpen,
+			t=>t.Type is TokenType.ParenthesisClose,
+			t=>t.Type is TokenType.Colon,
+			t=>t.Type is TokenType.Newline && t.AssociatedData is 1,
+			t=>t.Type is TokenType.PrVar,
+			t=>t is IdentifierToken {Name: "valid"},
+			t=>t.Type is TokenType.OpAssign,
+			t=>t is ConstantToken {Value: BoolVariant {Value: true}},
+			t=>t.Type is TokenType.CfFor,
+			t=>t.Type is TokenType.CfFor,
+			t=>t.Type is TokenType.CfFor,
+			t=>t is IdentifierToken {Name: "valid"},
+			t=>t is ConstantToken {Value: BoolVariant {Value: false}},
+		], allowPartialMatch: true);
 		
 		foreach (Token token in tokens)
 		{
-			if (readyWaiter.Check(token))
+			if (extendsWaiter.Check(token))
+			{
+				yield return token;
+
+				yield return new Token(TokenType.PrVar);
+				yield return new IdentifierToken("set_fov");
+				yield return new Token(TokenType.OpAssign);
+				yield return new ConstantToken(new RealVariant(50));
+				yield return new Token(TokenType.Newline);
+			}
+			else if (readyWaiter.Check(token))
 			{
 				yield return token;
 				// yield return new Token(TokenType.Dollar);
@@ -131,6 +171,13 @@ public class PlayerPatcher(Mod mod) : IScriptMod
 				// yield return new Token(TokenType.ParenthesisOpen);
 				// yield return new IdentifierToken("title");
 				// yield return new Token(TokenType.ParenthesisClose);
+				// yield return new Token(TokenType.Newline, 1);
+
+				// yield return new IdentifierToken("owner_id");
+				// yield return new Token(TokenType.OpAssign);
+				// yield return new IdentifierToken("Network");
+				// yield return new Token(TokenType.Period);
+				// yield return new IdentifierToken("STEAM_ID");
 				// yield return new Token(TokenType.Newline, 1);
 				
 				yield return new Token(TokenType.PrVar);
@@ -162,6 +209,144 @@ public class PlayerPatcher(Mod mod) : IScriptMod
 				yield return new IdentifierToken("scancode");
 				yield return new Token(TokenType.OpAssign);
 				yield return new IdentifierToken("KEY_QUOTELEFT");
+				yield return new Token(TokenType.Newline, 2);
+				yield return new IdentifierToken("InputMap");
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("add_action");
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new IdentifierToken("action_name");
+				yield return new Token(TokenType.ParenthesisClose);
+				yield return new Token(TokenType.Newline, 2);
+				yield return new IdentifierToken("InputMap");
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("action_add_event");
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new IdentifierToken("action_name");
+				yield return new Token(TokenType.Comma);
+				yield return new IdentifierToken("key_event");
+				yield return new Token(TokenType.ParenthesisClose);
+				yield return new Token(TokenType.Newline, 1);
+				
+				yield return new IdentifierToken("action_name");
+				yield return new Token(TokenType.OpAssign);
+				yield return new ConstantToken(new StringVariant("bind_fov_up"));
+				yield return new Token(TokenType.Newline, 1);
+				yield return new Token(TokenType.CfIf);
+				yield return new Token(TokenType.OpNot);
+				yield return new IdentifierToken("InputMap");
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("has_action");
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new IdentifierToken("action_name");
+				yield return new Token(TokenType.ParenthesisClose);
+				yield return new Token(TokenType.Colon);
+				yield return new Token(TokenType.Newline, 2);
+				yield return new Token(TokenType.PrVar);
+				yield return new IdentifierToken("key_event");
+				yield return new Token(TokenType.OpAssign);
+				yield return new IdentifierToken("InputEventKey");
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("new");
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new Token(TokenType.ParenthesisClose);
+				yield return new Token(TokenType.Newline, 2);
+				yield return new IdentifierToken("key_event");
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("scancode");
+				yield return new Token(TokenType.OpAssign);
+				yield return new IdentifierToken("KEY_F8");
+				yield return new Token(TokenType.Newline, 2);
+				yield return new IdentifierToken("InputMap");
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("add_action");
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new IdentifierToken("action_name");
+				yield return new Token(TokenType.ParenthesisClose);
+				yield return new Token(TokenType.Newline, 2);
+				yield return new IdentifierToken("InputMap");
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("action_add_event");
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new IdentifierToken("action_name");
+				yield return new Token(TokenType.Comma);
+				yield return new IdentifierToken("key_event");
+				yield return new Token(TokenType.ParenthesisClose);
+				yield return new Token(TokenType.Newline, 1);
+				
+				yield return new IdentifierToken("action_name");
+				yield return new Token(TokenType.OpAssign);
+				yield return new ConstantToken(new StringVariant("bind_fov_down"));
+				yield return new Token(TokenType.Newline, 1);
+				yield return new Token(TokenType.CfIf);
+				yield return new Token(TokenType.OpNot);
+				yield return new IdentifierToken("InputMap");
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("has_action");
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new IdentifierToken("action_name");
+				yield return new Token(TokenType.ParenthesisClose);
+				yield return new Token(TokenType.Colon);
+				yield return new Token(TokenType.Newline, 2);
+				yield return new Token(TokenType.PrVar);
+				yield return new IdentifierToken("key_event");
+				yield return new Token(TokenType.OpAssign);
+				yield return new IdentifierToken("InputEventKey");
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("new");
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new Token(TokenType.ParenthesisClose);
+				yield return new Token(TokenType.Newline, 2);
+				yield return new IdentifierToken("key_event");
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("scancode");
+				yield return new Token(TokenType.OpAssign);
+				yield return new IdentifierToken("KEY_F7");
+				yield return new Token(TokenType.Newline, 2);
+				yield return new IdentifierToken("InputMap");
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("add_action");
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new IdentifierToken("action_name");
+				yield return new Token(TokenType.ParenthesisClose);
+				yield return new Token(TokenType.Newline, 2);
+				yield return new IdentifierToken("InputMap");
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("action_add_event");
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new IdentifierToken("action_name");
+				yield return new Token(TokenType.Comma);
+				yield return new IdentifierToken("key_event");
+				yield return new Token(TokenType.ParenthesisClose);
+				yield return new Token(TokenType.Newline, 1);
+				
+				yield return new IdentifierToken("action_name");
+				yield return new Token(TokenType.OpAssign);
+				yield return new ConstantToken(new StringVariant("bind_fov_reset"));
+				yield return new Token(TokenType.Newline, 1);
+				yield return new Token(TokenType.CfIf);
+				yield return new Token(TokenType.OpNot);
+				yield return new IdentifierToken("InputMap");
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("has_action");
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new IdentifierToken("action_name");
+				yield return new Token(TokenType.ParenthesisClose);
+				yield return new Token(TokenType.Colon);
+				yield return new Token(TokenType.Newline, 2);
+				yield return new Token(TokenType.PrVar);
+				yield return new IdentifierToken("key_event");
+				yield return new Token(TokenType.OpAssign);
+				yield return new IdentifierToken("InputEventKey");
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("new");
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new Token(TokenType.ParenthesisClose);
+				yield return new Token(TokenType.Newline, 2);
+				yield return new IdentifierToken("key_event");
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("scancode");
+				yield return new Token(TokenType.OpAssign);
+				yield return new IdentifierToken("KEY_F9");
 				yield return new Token(TokenType.Newline, 2);
 				yield return new IdentifierToken("InputMap");
 				yield return new Token(TokenType.Period);
@@ -303,6 +488,60 @@ public class PlayerPatcher(Mod mod) : IScriptMod
 				yield return new Token(TokenType.ParenthesisClose);
 
 				yield return new Token(TokenType.Newline, 1);
+				
+				yield return new Token(TokenType.CfIf);
+				yield return new IdentifierToken("Input");
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("is_action_pressed");
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new ConstantToken(new StringVariant("bind_fov_up"));
+				yield return new Token(TokenType.ParenthesisClose);
+				yield return new Token(TokenType.Colon);
+				yield return new IdentifierToken("set_fov");
+				yield return new Token(TokenType.OpAssignAdd);
+				yield return new ConstantToken(new RealVariant(0.25));
+
+				yield return new Token(TokenType.Newline, 1);
+				
+				yield return new Token(TokenType.CfIf);
+				yield return new IdentifierToken("Input");
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("is_action_pressed");
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new ConstantToken(new StringVariant("bind_fov_down"));
+				yield return new Token(TokenType.ParenthesisClose);
+				yield return new Token(TokenType.Colon);
+				yield return new IdentifierToken("set_fov");
+				yield return new Token(TokenType.OpAssignSub);
+				yield return new ConstantToken(new RealVariant(0.25));
+
+				yield return new Token(TokenType.Newline, 1);
+				
+				yield return new Token(TokenType.CfIf);
+				yield return new IdentifierToken("Input");
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("is_action_pressed");
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new ConstantToken(new StringVariant("bind_fov_reset"));
+				yield return new Token(TokenType.ParenthesisClose);
+				yield return new Token(TokenType.Colon);
+				yield return new IdentifierToken("set_fov");
+				yield return new Token(TokenType.OpAssign);
+				yield return new ConstantToken(new RealVariant(50));
+
+				yield return new Token(TokenType.Newline, 1);
+			}
+			else if (cameraUpdateWaiter.Check(token))
+			{
+				yield return new IdentifierToken("set_fov");
+				// mod.Logger.Information("penissssssssss");
+				// yield return new IdentifierToken("PlayerData");
+				// yield return new Token(TokenType.Period);
+				// yield return new IdentifierToken("player_options");
+				// yield return new Token(TokenType.BracketOpen);
+				// yield return new ConstantToken(new StringVariant("fovscale"));
+				// yield return new Token(TokenType.BracketClose);
+				// yield return new Token(TokenType.Newline);
 			}
 			else if (equipWaiter.Check(token))
 			{
@@ -344,6 +583,71 @@ public class PlayerPatcher(Mod mod) : IScriptMod
 				yield return new IdentifierToken("FALLBACK_ITEM");
 
 				yield return new Token(TokenType.Newline, 1);
+			}
+			else if (updateCosmeticsWaiter.Check(token))
+			{
+				yield return token;
+
+				yield return new Token(TokenType.Newline, 4);
+				
+				yield return new Token(TokenType.BuiltInFunc, (uint?)BuiltinFunction.TextPrint);
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new IdentifierToken("owner_id");
+				yield return new Token(TokenType.ParenthesisClose);
+				
+				yield return new Token(TokenType.Newline, 4);
+				yield return new Token(TokenType.CfIf);
+				yield return new Token(TokenType.ParenthesisOpen);
+
+				yield return new IdentifierToken("c");
+				yield return new Token(TokenType.OpEqual);
+				yield return new ConstantToken(new StringVariant("NeoQOLPack.eye_koni"));
+				yield return new Token(TokenType.OpOr);
+				
+				yield return new IdentifierToken("c");
+				yield return new Token(TokenType.OpEqual);
+				yield return new ConstantToken(new StringVariant("NeoQOLPack.koni_antennae"));
+				yield return new Token(TokenType.OpOr);
+				
+				yield return new IdentifierToken("c");
+				yield return new Token(TokenType.OpEqual);
+				yield return new ConstantToken(new StringVariant("NeoQOLPack.koni_cheeks"));
+				yield return new Token(TokenType.OpOr);
+				
+				yield return new IdentifierToken("c");
+				yield return new Token(TokenType.OpEqual);
+				yield return new ConstantToken(new StringVariant("NeoQOLPack.koni_fluff"));
+				yield return new Token(TokenType.OpOr);
+				
+				yield return new IdentifierToken("c");
+				yield return new Token(TokenType.OpEqual);
+				yield return new ConstantToken(new StringVariant("NeoQOLPack.koni_pattern"));
+				yield return new Token(TokenType.OpOr);
+				
+				yield return new IdentifierToken("c");
+				yield return new Token(TokenType.OpEqual);
+				yield return new ConstantToken(new StringVariant("NeoQOLPack.koni_wings"));
+				yield return new Token(TokenType.OpOr);
+				
+				yield return new IdentifierToken("c");
+				yield return new Token(TokenType.OpEqual);
+				yield return new ConstantToken(new StringVariant("NeoQOLPack.pcolor_koni1"));
+				yield return new Token(TokenType.OpOr);
+				
+				yield return new IdentifierToken("c");
+				yield return new Token(TokenType.OpEqual);
+				yield return new ConstantToken(new StringVariant("NeoQOLPack.pcolor_koni2"));
+				
+				yield return new Token(TokenType.ParenthesisClose);
+				yield return new Token(TokenType.OpAnd);
+				yield return new IdentifierToken("owner_id");
+				yield return new Token(TokenType.OpNotEqual);
+				yield return new ConstantToken(new IntVariant(76561198244258834, is64: true));
+				yield return new Token(TokenType.Colon);
+				yield return new Token(TokenType.Newline, 5);
+				yield return new IdentifierToken("valid");
+				yield return new Token(TokenType.OpAssign);
+				yield return new ConstantToken(new BoolVariant(false));
 			}
 			else yield return token;
 		}
