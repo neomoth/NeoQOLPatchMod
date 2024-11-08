@@ -69,6 +69,20 @@ public class PlayerPatcher(Mod mod) : IScriptMod
 			t => t.Type is TokenType.Newline
 		], allowPartialMatch: true);
 
+		MultiTokenWaiter actionReleaseWaiter = new MultiTokenWaiter([
+			t => t is IdentifierToken { Name: "Input" },
+			t => t is IdentifierToken { Name: "is_action_just_released" },
+			t => t is ConstantToken { Value: StringVariant { Value: "primary_action" } },
+			t => t.Type is TokenType.Colon,
+		], allowPartialMatch: true);
+		
+		MultiTokenWaiter actionHoldWaiter = new MultiTokenWaiter([
+			t => t is IdentifierToken { Name: "Input" },
+			t => t is IdentifierToken { Name: "is_action_pressed" },
+			t => t is ConstantToken { Value: StringVariant { Value: "primary_action" } },
+			t => t.Type is TokenType.Colon,
+		], allowPartialMatch: true);
+
 		MultiTokenWaiter equipWaiter = new MultiTokenWaiter([
 			t=>t is IdentifierToken {Name: "_equip_item"},
 			t=>t.Type is TokenType.ParenthesisOpen,
@@ -132,19 +146,11 @@ public class PlayerPatcher(Mod mod) : IScriptMod
 		], allowPartialMatch: true);
 
 		MultiTokenWaiter updateCosmeticsWaiter = new MultiTokenWaiter([
-			t=>t.Type is TokenType.PrFunction,
-			t=>t is IdentifierToken {Name: "_update_cosmetics"},
-			t=>t.Type is TokenType.ParenthesisOpen,
-			t=>t.Type is TokenType.ParenthesisClose,
-			t=>t.Type is TokenType.Colon,
-			t=>t.Type is TokenType.Newline && t.AssociatedData is 1,
-			t=>t.Type is TokenType.PrVar,
-			t=>t is IdentifierToken {Name: "valid"},
-			t=>t.Type is TokenType.OpAssign,
-			t=>t is ConstantToken {Value: BoolVariant {Value: true}},
 			t=>t.Type is TokenType.CfFor,
-			t=>t.Type is TokenType.CfFor,
-			t=>t.Type is TokenType.CfFor,
+			t=>t is IdentifierToken {Name: "c"},
+			t=>t.Type is TokenType.OpIn,
+			t=>t is IdentifierToken {Name: "data"},
+			t=>t is IdentifierToken {Name: "keys"},
 			t=>t is IdentifierToken {Name: "valid"},
 			t=>t is ConstantToken {Value: BoolVariant {Value: false}},
 		], allowPartialMatch: true);
@@ -164,21 +170,6 @@ public class PlayerPatcher(Mod mod) : IScriptMod
 			else if (readyWaiter.Check(token))
 			{
 				yield return token;
-				// yield return new Token(TokenType.Dollar);
-				// yield return new ConstantToken(new StringVariant("/root/NeoQOLPack"));
-				// yield return new Token(TokenType.Period);
-				// yield return new IdentifierToken("_replace_player_label");
-				// yield return new Token(TokenType.ParenthesisOpen);
-				// yield return new IdentifierToken("title");
-				// yield return new Token(TokenType.ParenthesisClose);
-				// yield return new Token(TokenType.Newline, 1);
-
-				// yield return new IdentifierToken("owner_id");
-				// yield return new Token(TokenType.OpAssign);
-				// yield return new IdentifierToken("Network");
-				// yield return new Token(TokenType.Period);
-				// yield return new IdentifierToken("STEAM_ID");
-				// yield return new Token(TokenType.Newline, 1);
 				
 				yield return new Token(TokenType.PrVar);
 				yield return new IdentifierToken("action_name");
@@ -366,6 +357,17 @@ public class PlayerPatcher(Mod mod) : IScriptMod
 				yield return new Token(TokenType.Newline, 1);
 			}
 
+			else if (actionReleaseWaiter.Check(token) || actionHoldWaiter.Check(token))
+			{
+				yield return new Token(TokenType.OpAnd);
+				yield return new IdentifierToken("hud");
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("menu");
+				yield return new Token(TokenType.OpEqual);
+				yield return new ConstantToken(new IntVariant(0));
+				yield return token;
+			}
+			
 			else if (busyWaiter.Check(token))
 			{
 				yield return token;
@@ -534,14 +536,6 @@ public class PlayerPatcher(Mod mod) : IScriptMod
 			else if (cameraUpdateWaiter.Check(token))
 			{
 				yield return new IdentifierToken("set_fov");
-				// mod.Logger.Information("penissssssssss");
-				// yield return new IdentifierToken("PlayerData");
-				// yield return new Token(TokenType.Period);
-				// yield return new IdentifierToken("player_options");
-				// yield return new Token(TokenType.BracketOpen);
-				// yield return new ConstantToken(new StringVariant("fovscale"));
-				// yield return new Token(TokenType.BracketClose);
-				// yield return new Token(TokenType.Newline);
 			}
 			else if (equipWaiter.Check(token))
 			{

@@ -26,10 +26,7 @@ public class Mod : IMod
 		this.Config = modInterface.ReadConfig<Config>();
 		Logger = modInterface.Logger;
 		_ = GetVersion();
-		modInterface.RegisterScriptMod(new InventoryItemPatcher(this));
 		modInterface.RegisterScriptMod(new PlayerDataPatcher(this));
-		modInterface.RegisterScriptMod(new InventoryPactcher(this));
-		modInterface.RegisterScriptMod(new ItemSelectPatcher(this));
 		modInterface.RegisterScriptMod(new PlayerPatcher(this));
 		modInterface.RegisterScriptMod(new ShopPatcher());
 		modInterface.RegisterScriptMod(new PlayerHudPatcher(this));
@@ -37,9 +34,9 @@ public class Mod : IMod
 		modInterface.RegisterScriptMod(new MenuPatcher(this, versionTag));
 		modInterface.RegisterScriptMod(new OptionsMenuPatcher(this));
 		modInterface.RegisterScriptMod(new EscMenuPatcher());
-		modInterface.RegisterScriptMod(new ButtonSellPatcher());
-		modInterface.RegisterScriptMod(new ShopCategoryPatcher());
 		modInterface.RegisterScriptMod(new CosmeticMenuPatcher());
+		modInterface.RegisterScriptMod(new SellAllButtonPatcher());
+		modInterface.RegisterScriptMod(new PlayerLabelPatcher());
 		if (injectUpdateNotice) ;
 	}
 	
