@@ -37,6 +37,7 @@ public class Mod : IMod
 		modInterface.RegisterScriptMod(new CosmeticMenuPatcher());
 		modInterface.RegisterScriptMod(new SellAllButtonPatcher());
 		modInterface.RegisterScriptMod(new PlayerLabelPatcher());
+		modInterface.RegisterScriptMod(new InventoryItemPatcher());
 		if (injectUpdateNotice) ;
 	}
 	

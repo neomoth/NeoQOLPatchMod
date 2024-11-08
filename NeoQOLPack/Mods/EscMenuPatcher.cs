@@ -10,6 +10,11 @@ public class EscMenuPatcher : IScriptMod
 
 	public IEnumerable<Token> Modify(string path, IEnumerable<Token> tokens)
 	{
+		MultiTokenWaiter processWaiter = new MultiTokenWaiter([
+			t=>t is IdentifierToken {Name: "_process"},
+			t=>t.Type is TokenType.Newline
+		], allowPartialMatch:true);
+		
 		MultiTokenWaiter openWaiter = new MultiTokenWaiter([
 			t=>t is IdentifierToken {Name: "_open"},
 			t=>t.Type is TokenType.ParenthesisOpen,
@@ -28,7 +33,45 @@ public class EscMenuPatcher : IScriptMod
 
 		foreach (Token token in tokens)
 		{
-			if (openWaiter.Check(token))
+			if (processWaiter.Check(token))
+			{
+				yield return token;
+
+				yield return new IdentifierToken("get_node");
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new ConstantToken(new StringVariant("VBoxContainer"));
+				yield return new Token(TokenType.ParenthesisClose);
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("anchor_top");
+				yield return new Token(TokenType.OpAssign);
+				yield return new ConstantToken(new RealVariant(0.32));
+				yield return new Token(TokenType.CfIf);
+				yield return new Token(TokenType.OpNot);
+				yield return new IdentifierToken("Network");
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("CODE_ENABLED");
+				yield return new Token(TokenType.CfElse);
+				yield return new ConstantToken(new RealVariant(0.29));
+				yield return new Token(TokenType.Newline, 1);
+				yield return new IdentifierToken("get_node");
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new ConstantToken(new StringVariant("VBoxContainer"));
+				yield return new Token(TokenType.ParenthesisClose);
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("anchor_bottom");
+				yield return new Token(TokenType.OpAssign);
+				yield return new ConstantToken(new RealVariant(0.68));
+				yield return new Token(TokenType.CfIf);
+				yield return new Token(TokenType.OpNot);
+				yield return new IdentifierToken("Network");
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("CODE_ENABLED");
+				yield return new Token(TokenType.CfElse);
+				yield return new ConstantToken(new RealVariant(0.71));
+									
+				yield return new Token(TokenType.Newline, 1);
+			}
+			else if (openWaiter.Check(token))
 			{
 				yield return token;
 				
