@@ -24,6 +24,16 @@ public class InventoryItemPatcher : IScriptMod
 				yield return token;
 				
 				yield return new Token(TokenType.Newline, 1);
+				yield return new Token(TokenType.CfIf);
+				yield return new IdentifierToken("get_node");
+				yield return new Token(TokenType.ParenthesisOpen);
+				yield return new ConstantToken(new StringVariant("/root/playerhud"));
+				yield return new Token(TokenType.ParenthesisClose);
+				yield return new Token(TokenType.Period);
+				yield return new IdentifierToken("menu");
+				yield return new Token(TokenType.OpEqual);
+				yield return new ConstantToken(new IntVariant(2));
+				yield return new Token(TokenType.Colon);
 				yield return new IdentifierToken("Tooltip");
 				yield return new Token(TokenType.Period);
 				yield return new IdentifierToken("_update");
